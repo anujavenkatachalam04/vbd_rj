@@ -95,11 +95,11 @@ def fmt_lag(val):
     return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Lag not found"
 
 subplot_titles = [
-    f"Dengue Cases (Threshold Lag: {fmt_lag(lag_all)})",
+    f"Dengue Cases (All Thresholds Lag: {fmt_lag(lag_all)})",
     f"Max Temperature (°C) (Max Temp Threshold Lag: {fmt_lag(lag_max)})",
     f"Min Temperature (°C) (Min Temp Threshold Lag: {fmt_lag(lag_min)})",
     f"Mean Relative Humidity (%) (Rel Hum Threshold Lag: {fmt_lag(lag_hum)})",
-    f"Rainfall (mm) (Lag b/w Max Cases Week & Prior Max Rainfall Week: {fmt_lag(lag_rainfall)})"
+    f"Rainfall (mm) (Lag b/w Max Cases Week & Max Rainfall Week (Prior): {fmt_lag(lag_rainfall)})"
 ]
 
 fig = make_subplots(
