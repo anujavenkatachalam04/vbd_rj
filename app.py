@@ -152,9 +152,11 @@ for i in range(1, 6):
         ticks="outside",
         showgrid=True,
         gridcolor='lightgray',
-        dtick=604800000,
-        range=[x_start, x_end]
+        dtick=604800000,  # 1 week in milliseconds
+        range=[x_start, x_end],
+        tick0=filtered["week_start_date"].iloc[0]  # Ensures first week is the first tick
     )
+
 
 # --- Layout ---
 fig.update_layout(
