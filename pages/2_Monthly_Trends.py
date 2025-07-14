@@ -23,10 +23,21 @@ def load_monthly_drive():
 # --- Download file if not exists ---
 csv_path = "dist_ts_dashboard.csv"
 if not os.path.exists(csv_path):
-    drive = load_monthly_drive()
-    file_id = "16UGTNwPCGs7fO5XN4vYahfa7mCnnMBxD"  # Replace with actual file ID for monthly file
+    drive = load_drive(st.secrets["gdrive_creds"])
     downloaded = drive.CreateFile({'id': file_id})
+    downloaded.FetchMetadata()  # just to confirm access
     downloaded.GetContentFile(csv_path)
+
+    # Debug print — shows first few lines of file
+    with open(csv_path, 'r') as f:
+        preview = f.read(300)
+        st.text("File preview:\n" + preview)
+
+# --- Check file is not empty ---
+if os.path.getsize(csv_path) == 0:
+    st.error("Downloaded CSV file is empty — check Drive upload or file permissions.")
+    st.stop()
+
 
 # --- Load CSV ---
 @st.cache_data
