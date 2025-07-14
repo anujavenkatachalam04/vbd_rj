@@ -54,15 +54,15 @@ filtered = filtered.sort_values("Year_Month")
 x_vals = filtered["Year_Month"]
 
 fig = make_subplots(
-    rows=5, cols=1, shared_xaxes=True,
+    rows=5, cols=1, shared_xaxes=False,
     vertical_spacing=0.05,
-    subplot_titles=[
-        "Dengue Cases (Monthly Sum)",
-        "Max Temperature (Monthly Max)",
-        "Min Temperature (Monthly Min)",
-        "Mean Relative Humidity (Monthly Mean %)",
-        "Rainfall (mm) (Monthly Total)"
-    ]
+  subplot_titles = [
+    "Dengue Cases",
+    "Max Temperature",
+    "Min Temperature",
+    "Mean Relative Humidity (%)",
+    "Rainfall (mm)"
+]
 )
 
 # --- Add Traces ---
