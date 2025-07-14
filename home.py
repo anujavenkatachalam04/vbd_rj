@@ -37,7 +37,4 @@ Use the sidebar to explore the following pages:
 - Minimum Temperature ≥ 18°C
 - Maximum Temperature ≤ 35°C
 - Relative Humidity >= 60%
-
-### 📆 Timeline:
-- Weekly data: June 2024 to June 2025  
-- Monthly data: January 2022 to June 2025
+""")
