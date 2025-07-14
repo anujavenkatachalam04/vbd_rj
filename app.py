@@ -78,6 +78,7 @@ lag_all = filtered["lag_all_weeks"].iloc[0]
 lag_min = filtered["lag_min_weeks"].iloc[0]
 lag_max = filtered["lag_max_weeks"].iloc[0]
 lag_hum = filtered["lag_hum_weeks"].iloc[0]
+lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
 
 def fmt_lag(val):
     return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Lag not found"
