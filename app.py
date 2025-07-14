@@ -16,9 +16,11 @@ st.set_page_config(page_title="Dengue Climate Dashboard", layout="wide")
 # --- Load Google Drive credentials and file ---
 @st.cache_resource
 def load_drive():
-    creds_dict = st.secrets["gdrive_creds"]
+    # Convert SecretsDict to standard dict for json.dump
+    creds_dict = dict(st.secrets["gdrive_creds"])  
+
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as tmp:
-        json.dump(creds_dict, tmp)
+        json.dump(creds_dict, tmp)  # Now it's safe to dump
         tmp.flush()
         gauth = GoogleAuth()
         gauth.credentials = ServiceAccountCredentials.from_json_keyfile_name(
@@ -27,6 +29,7 @@ def load_drive():
         )
         drive = GoogleDrive(gauth)
     return drive
+
 
 # --- Download file if not exists ---
 csv_path = "time_series_dashboard.csv"
