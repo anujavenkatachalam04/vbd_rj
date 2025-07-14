@@ -84,13 +84,12 @@ lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
 def fmt_lag(val):
     return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Lag not found"
 
-# --- Create Subplots with lag info in titles ---
 subplot_titles = [
-    f"Dengue Cases (Threshold Lag: {fmt_lag(lag_all)} week{'s' if lag_all != 1 else ''})",
-    f"Max Temperature (°C) (Max Temp Threshold Lag: {fmt_lag(lag_max)} week{'s' if lag_max != 1 else ''})",
-    f"Min Temperature (°C) (Min Temp Threshold Lag: {fmt_lag(lag_min)} week{'s' if lag_min != 1 else ''})",
-    f"Mean Relative Humidity (%) (Rel Hum Threshold Lag: {fmt_lag(lag_hum)} week{'s' if lag_hum != 1 else ''})",
-    f"Rainfall (mm) (Lag b/w Max Cases Week & Prior Max Rainfall Week : {fmt_lag(lag_rainfall)} week{'s' if lag_rainfall != 1 else ''})"
+    f"Dengue Cases (Threshold Lag: {fmt_lag(lag_all)})",
+    f"Max Temperature (°C) (Max Temp Threshold Lag: {fmt_lag(lag_max)})",
+    f"Min Temperature (°C) (Min Temp Threshold Lag: {fmt_lag(lag_min)})",
+    f"Mean Relative Humidity (%) (Rel Hum Threshold Lag: {fmt_lag(lag_hum)})",
+    f"Rainfall (mm) (Lag b/w Max Cases Week & Prior Max Rainfall Week: {fmt_lag(lag_rainfall)})"
 ]
 
 fig = make_subplots(
