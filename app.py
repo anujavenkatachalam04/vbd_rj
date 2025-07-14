@@ -160,7 +160,7 @@ for i in range(1, 6):
 fig.update_layout(
     height=2100,
     width=3000,
-    title_text=f"Weekly Dengue and Climate Trends — Block: {selected_sdt}, District: {selected_dt}",
+    title_text=f"Weekly Dengue and Climate Trends (June-December 2024) — Block: {selected_sdt}, District: {selected_dt}",
     showlegend=False,
     margin=dict(t=80, b=100),
     template=None,
