@@ -70,8 +70,8 @@ if filtered.empty:
 
 filtered = filtered.sort_values("week_start_date")
 week_dates = filtered["week_start_date"]
-x_start = filtered["week_start_date"].min() - pd.Timedelta(weeks=1)
-x_end = filtered["week_start_date"].max() + pd.Timedelta(weeks=1)
+x_start = filtered["week_start_date"].min()
+x_end = filtered["week_start_date"].max()
 
 # --- Extract lags ---
 trigger = filtered["trigger_date"].iloc[0]
