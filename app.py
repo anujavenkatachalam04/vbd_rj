@@ -16,8 +16,7 @@ st.set_page_config(page_title="Dengue Climate Dashboard", layout="wide")
 # --- Load Google Drive credentials and file ---
 @st.cache_resource
 def load_drive():
-    creds_json = st.secrets["gdrive_creds"]
-    creds_dict = json.loads(creds_json)
+    creds_dict = st.secrets["gdrive_creds"]
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as tmp:
         json.dump(creds_dict, tmp)
         tmp.flush()
@@ -43,11 +42,13 @@ def load_data():
     df = pd.read_csv(csv_path, parse_dates=["week_start_date"])
     df['dtname'] = df['dtname'].astype(str).str.strip()
     df['sdtname'] = df['sdtname'].astype(str).str.strip()
+    df['dtname_disp'] = df['dtname_disp'].astype(str).str.strip()
+    return df
 
 df = load_data()
 
 # --- Sidebar filters ---
-priority_districts = [dist for dist in df['dtname_disp'].unique() if re.search("High", dist, re.IGNORECASE)] 
+priority_districts = [dist for dist in df['dtname_disp'].unique() if re.search('High', dist, re.IGNORECASE)] 
 
 # All districts from data
 all_districts = sorted(set(df['dtname_disp'].unique()) - set(priority_districts) - {'All'})
