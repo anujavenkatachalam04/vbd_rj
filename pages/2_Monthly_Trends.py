@@ -52,6 +52,8 @@ if filtered.empty:
 
 filtered = filtered.sort_values("Year_Month")
 x_vals = filtered["Year_Month"]
+x_start = filtered["Year_Month"].min()
+x_end = filtered["Year_Month"].max()
 
 fig = make_subplots(
     rows=5, cols=1, shared_xaxes=False,
@@ -88,11 +90,25 @@ def add_trace(row, col, y_data_col, trace_name, color):
         range=[0, None]
     )
 
-add_trace(1, 1, "dengue_cases", "Dengue Cases", "crimson")
-add_trace(2, 1, "temperature_2m_max", "Max Temperature (\u00b0C)", "orange")
-add_trace(3, 1, "temperature_2m_min", "Min Temperature (\u00b0C)", "blue")
-add_trace(4, 1, "relative_humidity_2m_mean", "Mean RH (%)", "green")
-add_trace(5, 1, "rain_sum", "Rainfall (mm)", "purple")
+add_trace(1, 1, "dengue_cases", "Dengue Cases (Monthly Sum)", "red")
+add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Monthly Max)", "orange")
+add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Monthly Min)", "blue")
+add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Monthly Mean)", "green")
+add_trace(5, 1, "rain_sum", "Rainfall (mm) (Monthly Sum)", "purple")
+
+for i in range(1, 6):
+    fig.update_xaxes(
+        row=i, col=1,
+        tickangle=-45,
+        tickformat="%d-%b-%y",
+        tickfont=dict(size=10, color='black'),
+        ticks="outside",
+        showgrid=True,
+        gridcolor='lightgray',
+        dtick=604800000,
+        range=[x_start, x_end],
+        tick0=filtered["Year_Month"].iloc[0]
+    )
 
 # --- Layout ---
 fig.update_layout(
