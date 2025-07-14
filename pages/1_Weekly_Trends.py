@@ -4,11 +4,28 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import timedelta
 import re
-from utils import load_drive, load_weekly_data, get_sorted_districts  # Imported utility functions
+from utils import load_drive, get_sorted_districts  # Use utils
 
 st.set_page_config(page_title="Dengue Climate Dashboard", layout="wide")
 
-# --- Load Data ---
+# --- Load data from Google Drive only if not downloaded ---
+csv_path = "time_series_dashboard.csv"
+file_id = "1ad-PcGSpk6YoO-ZolodMWfvFq64kO-Z_"  # Set your correct file ID here
+
+if not os.path.exists(csv_path):
+    drive = load_drive(st.secrets["gdrive_creds"])
+    downloaded = drive.CreateFile({'id': file_id})
+    downloaded.GetContentFile(csv_path)
+
+# --- Load CSV ---
+@st.cache_data
+def load_weekly_data():
+    df = pd.read_csv(csv_path, parse_dates=["week_start_date"])
+    df['dtname'] = df['dtname'].astype(str).str.strip()
+    df['sdtname'] = df['sdtname'].astype(str).str.strip()
+    df['dtname_disp'] = df['dtname_disp'].astype(str).str.strip()
+    return df
+
 df = load_weekly_data()
 
 # --- Sidebar filters ---
@@ -41,8 +58,8 @@ def fmt_lag(val):
 
 subplot_titles = [
     f"Dengue Cases (All Thresholds Lag: {fmt_lag(lag_all)})",
-    f"Max Temperature (°C) (Max Temp Threshold Lag: {fmt_lag(lag_max)})",
-    f"Min Temperature (°C) (Min Temp Threshold Lag: {fmt_lag(lag_min)})",
+    f"Max Temperature (\u00b0C) (Max Temp Threshold Lag: {fmt_lag(lag_max)})",
+    f"Min Temperature (\u00b0C) (Min Temp Threshold Lag: {fmt_lag(lag_min)})",
     f"Mean Relative Humidity (%) (Rel Hum Threshold Lag: {fmt_lag(lag_hum)})",
     f"Rainfall (mm) (Lag b/w Max Cases Week & Max Rainfall Week (Prior): {fmt_lag(lag_rainfall)})"
 ]
@@ -134,6 +151,6 @@ st.markdown("""
 - Max Temp: Weeks between peak cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
 - Min Temp: Weeks between peak cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
 - Rel. Humidity: Weeks between peak cases and start of sustained RH ≥ 60% prior to peak cases.
-- Dengue Cases: Weeks between peak cases and start of sustained combined thresholds (Max Temperature (°C) ≤ 35°C AND Min Temperature (°C) ≥ 18°C OR Mean Relative Humidity (%) ≥ 60%) prior to peak cases.
+- Dengue Cases: Weeks between peak cases and start of sustained combined thresholds (Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH ≥ 60%) prior to peak cases.
 - Rainfall: Weeks between peak cases and week of maximum rainfall prior to peak cases.
 """)
