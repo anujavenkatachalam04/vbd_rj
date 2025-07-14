@@ -47,7 +47,7 @@ def load_data():
 df = load_data()
 
 # --- Sidebar filters ---
-priority_districts = [dist for dist in df['dtname_disp'].unique() if re.search("High", dist, re.ignorecase)] 
+priority_districts = [dist for dist in df['dtname_disp'].unique() if re.search("High", dist, re.IGNORECASE)] 
 
 # All districts from data
 all_districts = sorted(set(df['dtname_disp'].unique()) - set(priority_districts) - {'All'})
