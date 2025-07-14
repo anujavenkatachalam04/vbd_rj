@@ -181,13 +181,7 @@ if pd.notna(pct_blocks):
 
 # --- Threshold Notes ---
 st.markdown("""
-**Note on Thresholds**:
-- **Dengue Cases**: Weeks shaded **red** indicate that Max Temperature (°C) ≤ 35°C AND Min Temperature (°C) ≥ 18°C OR Mean Relative Humidity (%) ≥ 60%.
-- **Max Temperature (°C)**: Weeks shaded **orange** indicate values ≤ 35°C.
-- **Min Temperature (°C)**: Weeks shaded **blue** indicate values ≥ 18°C.
-- **Mean Relative Humidity (%)**: Weeks shaded **green** indicate values ≥ 60%.
-
- **Threshold Lag Definitions**
+ **Lag Calculation**
 - Max Temp: Weeks between peak cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
 - Min Temp: Weeks between peak cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
 - Rel. Humidity: Weeks between peak cases and start of sustained RH ≥ 60% prior to peak cases.
