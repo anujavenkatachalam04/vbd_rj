@@ -10,7 +10,8 @@ from pydrive2.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
 
 # --- Load Google Drive credentials and file ---
-def load_drive(creds_dict):
+def load_drive(gdrive_secrets):
+    creds_dict = dict(gdrive_secrets)  # Convert to real dict
     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as tmp:
         json.dump(creds_dict, tmp)
         tmp.flush()
