@@ -9,6 +9,7 @@ from pydrive2.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import re
 
 st.set_page_config(page_title="Dengue Climate Dashboard", layout="wide")
 
@@ -42,22 +43,11 @@ def load_data():
     df = pd.read_csv(csv_path, parse_dates=["week_start_date"])
     df['dtname'] = df['dtname'].astype(str).str.strip()
     df['sdtname'] = df['sdtname'].astype(str).str.strip()
-    df['high_incidence_district'] = df['high_incidence_district'].astype(bool)
-
-    # Create dtname_disp
-    df["dtname_disp"] = df.apply(
-        lambda row: f"{row['dtname']} (High)" if row["high_incidence_district"] else row["dtname"],
-        axis=1
-    )
-
-    if "meets_threshold" in df.columns:
-        df["meets_threshold"] = df["meets_threshold"].astype(str).str.lower() == "true"
-    return df
 
 df = load_data()
 
 # --- Sidebar filters ---
-priority_districts = ['Jaipur (High)', 'Udaipur (High)', 'Bikaner (High)', 'Dausa (High)', 'Ajmer (High)']
+priority_districts = [dist for dist in df['dtname_disp'].unique() if re.search("High", dist, re.ignorecase)] 
 
 # All districts from data
 all_districts = sorted(set(df['dtname_disp'].unique()) - set(priority_districts) - {'All'})
