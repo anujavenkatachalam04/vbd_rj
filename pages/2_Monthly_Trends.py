@@ -100,15 +100,17 @@ for i in range(1, 6):
     fig.update_xaxes(
         row=i, col=1,
         tickangle=-45,
-        tickformat="%d-%b-%y",
+        tickformat="%b\n%Y",
+        tickmode="linear",
+        dtick="M3",  # Show every 3rd month
         tickfont=dict(size=10, color='black'),
         ticks="outside",
         showgrid=True,
         gridcolor='lightgray',
-        dtick=604800000,
         range=[x_start, x_end],
         tick0=filtered["Year_Month"].iloc[0]
     )
+
 
 # --- Layout ---
 fig.update_layout(
