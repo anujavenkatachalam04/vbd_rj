@@ -74,21 +74,21 @@ x_end = filtered["week_start_date"].max()
 
 # --- Extract lags ---
 trigger = filtered["trigger_date"].iloc[0]
-lag_all = filtered["lag_all"].iloc[0]
-lag_min = filtered["lag_min"].iloc[0]
-lag_max = filtered["lag_max"].iloc[0]
-lag_hum = filtered["lag_hum"].iloc[0]
+lag_all = filtered["lag_all_weeks"].iloc[0]
+lag_min = filtered["lag_min_weeks"].iloc[0]
+lag_max = filtered["lag_max_weeks"].iloc[0]
+lag_hum = filtered["lag_hum_weeks"].iloc[0]
 
 def fmt_lag(val):
-    return f"{int(val)} day{'s' if int(val) != 1 else ''}" if pd.notna(val) else "–"
+    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Lag not found"
 
 # --- Create Subplots with lag info in titles ---
 subplot_titles = [
-    f"Dengue Cases (Lag: {fmt_lag(lag_all)})",
-    f"Max Temperature (°C) (Lag: {fmt_lag(lag_max)})",
-    f"Min Temperature (°C) (Lag: {fmt_lag(lag_min)})",
-    f"Mean Relative Humidity (%) (Lag: {fmt_lag(lag_hum)})",
-    "Rainfall (mm)"
+    f"Dengue Cases (Threshold Lag: {fmt_lag(lag_all)} week{'s' if lag_all != 1 else ''})",
+    f"Max Temperature (°C) (Max Temp Threshold Lag: {fmt_lag(lag_max)} week{'s' if lag_max != 1 else ''})",
+    f"Min Temperature (°C) (Min Temp Threshold Lag: {fmt_lag(lag_min)} week{'s' if lag_min != 1 else ''})",
+    f"Mean Relative Humidity (%) (Rel Hum Threshold Lag: {fmt_lag(lag_hum)} week{'s' if lag_hum != 1 else ''})",
+    f"Rainfall (mm) (Lag b/w Max Cases Week & Prior Max Rainfall Week : {fmt_lag(lag_rainfall)} week{'s' if lag_rainfall != 1 else ''})"
 ]
 
 fig = make_subplots(
@@ -186,7 +186,11 @@ st.markdown("""
 - **Min Temperature (°C)**: Weeks shaded **blue** indicate values ≥ 18°C.
 - **Mean Relative Humidity (%)**: Weeks shaded **green** indicate values ≥ 60%.
 
-**Note on Case Increase Detection**:
-- An increase in cases is detected when **this week’s cases > last week’s**, and **last week’s > two weeks ago** — indicating a **two-week sustained rise** in dengue cases.
+ **Threshold Lag Definitions**
+- Max Temp: Weeks between peak cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
+- Min Temp: Weeks between peak cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
+- Rel. Humidity: Weeks between peak cases and start of sustained RH ≥ 60% prior to peak cases.
+- Dengue Cases: Weeks between peak cases and start of sustained combined thresholds (Max Temperature (°C) ≤ 35°C AND Min Temperature (°C) ≥ 18°C OR Mean Relative Humidity (%) ≥ 60%) prior to peak cases.
+- Rainfall: Weeks between peak cases and week of maximum rainfall prior to peak cases.
 """)
 
