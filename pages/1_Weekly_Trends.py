@@ -153,6 +153,7 @@ if pd.notna(pct_blocks):
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
+** Districts suffixed with 'High' report the highest cases from 2022-2024.
  **Lag Calculation**
 - Max Temp: Weeks between peak cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
 - Min Temp: Weeks between peak cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
