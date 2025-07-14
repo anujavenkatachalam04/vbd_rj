@@ -49,13 +49,23 @@ def load_data():
 df = load_data()
 
 # --- Sidebar filters ---
-priority_districts = [dist for dist in df['dtname_disp'].unique() if re.search('High', dist, re.IGNORECASE)] 
 
-# All districts from data
-all_districts = sorted(set(df['dtname_disp'].unique()) - set(priority_districts) - {'All'})
+# Separate 'All'
+individual_districts = [d for d in df['dtname_disp'].unique() if d.str.lower() != 'all']
+
+# Sort function
+def sort_key(name):
+    match = re.search(r'\(High - (\d+)\)', name)
+    if match:
+        return (0, int(match.group(1)))  # High-ranked districts come first
+    else:
+        return (1, name.lower())         # Then others alphabetically
+
+# Apply sort
+sorted_districts = sorted(individual_districts, key=sort_key)
 
 # Combine with "All" at the top
-districts = ["All"] + priority_districts + all_districts
+final_districts = ['All'] + sorted_districts
 
 selected_dt = st.sidebar.selectbox("Select District", districts)
 
