@@ -1,74 +1,19 @@
 import streamlit as st
 import pandas as pd
-import json
-import os
-import tempfile
-from datetime import timedelta
-from pydrive2.auth import GoogleAuth
-from pydrive2.drive import GoogleDrive
-from oauth2client.service_account import ServiceAccountCredentials
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from datetime import timedelta
 import re
+from utils import load_drive, load_weekly_data, get_sorted_districts  # Imported utility functions
 
 st.set_page_config(page_title="Dengue Climate Dashboard", layout="wide")
 
-# --- Load Google Drive credentials and file ---
-@st.cache_resource
-def load_drive():
-    creds_dict = dict(st.secrets["gdrive_creds"])  # Convert to JSON-serializable dict
-
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as tmp:
-        json.dump(creds_dict, tmp)  # Now safe
-        tmp.flush()
-        gauth = GoogleAuth()
-        gauth.credentials = ServiceAccountCredentials.from_json_keyfile_name(
-            tmp.name,
-            scopes=["https://www.googleapis.com/auth/drive"]
-        )
-        drive = GoogleDrive(gauth)
-    return drive
-
-# --- Download file if not exists ---
-csv_path = "time_series_dashboard.csv"
-if not os.path.exists(csv_path):
-    drive = load_drive()
-    file_id = "1ad-PcGSpk6YoO-ZolodMWfvFq64kO-Z_"  # Replace with your actual file ID
-    downloaded = drive.CreateFile({'id': file_id})
-    downloaded.GetContentFile(csv_path)
-
-# --- Load CSV ---
-@st.cache_data
-def load_data():
-    df = pd.read_csv(csv_path, parse_dates=["week_start_date"])
-    df['dtname'] = df['dtname'].astype(str).str.strip()
-    df['sdtname'] = df['sdtname'].astype(str).str.strip()
-    df['dtname_disp'] = df['dtname_disp'].astype(str).str.strip()
-    return df
-
-df = load_data()
+# --- Load Data ---
+df = load_weekly_data()
 
 # --- Sidebar filters ---
-
-# Separate 'All'
-individual_districts = [d for d in df['dtname_disp'].unique() if d.lower() != 'all']
-
-# Sort function
-def sort_key(name):
-    match = re.search(r'\(High - (\d+)\)', name)
-    if match:
-        return (0, int(match.group(1)))  # High-ranked districts come first
-    else:
-        return (1, name.lower())         # Then others alphabetically
-
-# Apply sort
-sorted_districts = sorted(individual_districts, key=sort_key)
-
-# Combine with "All" at the top
-final_districts = ['All'] + sorted_districts
-
-selected_dt = st.sidebar.selectbox("Select District", final_districts)
-
+districts = get_sorted_districts(df)
+selected_dt = st.sidebar.selectbox("Select District", districts)
 subdistricts = ["All"] + sorted([s for s in df[df['dtname_disp'] == selected_dt]['sdtname'].unique() if s != "All"])
 selected_sdt = st.sidebar.selectbox("Select Block", subdistricts)
 
@@ -119,7 +64,6 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
         line=dict(color=color)
     ), row=row, col=col)
 
-    # Set y-axis config
     fig.update_yaxes(
         title_text=trace_name,
         row=row,
@@ -145,14 +89,12 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
                 row=row, col=col
             )
 
-# Add all 5 plots
 add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highlight_cond=(filtered["meets_threshold"]), highlight_color="red")
 add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Max)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange")
 add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Min)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue")
 add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"] >= 60), highlight_color="green")
 add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple")
 
-# --- X-axis config for all subplots ---
 for i in range(1, 6):
     fig.update_xaxes(
         row=i, col=1,
@@ -162,13 +104,11 @@ for i in range(1, 6):
         ticks="outside",
         showgrid=True,
         gridcolor='lightgray',
-        dtick=604800000,  # 1 week in milliseconds
+        dtick=604800000,
         range=[x_start, x_end],
-        tick0=filtered["week_start_date"].iloc[0]  # Ensures first week is the first tick
+        tick0=filtered["week_start_date"].iloc[0]
     )
 
-
-# --- Layout ---
 fig.update_layout(
     height=2100,
     width=3000,
@@ -181,17 +121,14 @@ fig.update_layout(
     font=dict(color='black')
 )
 
-# --- Display Chart ---
 st.plotly_chart(fig, use_container_width=True)
 
-# --- Display % of blocks with at least one case ---
 pct_blocks = filtered["pct_blocks_with_cases"].iloc[0] if "pct_blocks_with_cases" in filtered.columns else None
 if pd.notna(pct_blocks):
     st.markdown(f"<div style='font-size: 14px; color: gray; margin-top: -20px;'>"
                 f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between June 2024 and June 2025."
                 f"</div>", unsafe_allow_html=True)
 
-# --- Threshold Notes ---
 st.markdown("""
  **Lag Calculation**
 - Max Temp: Weeks between peak cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
@@ -200,4 +137,3 @@ st.markdown("""
 - Dengue Cases: Weeks between peak cases and start of sustained combined thresholds (Max Temperature (°C) ≤ 35°C AND Min Temperature (°C) ≥ 18°C OR Mean Relative Humidity (%) ≥ 60%) prior to peak cases.
 - Rainfall: Weeks between peak cases and week of maximum rainfall prior to peak cases.
 """)
-
