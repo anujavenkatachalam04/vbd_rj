@@ -51,7 +51,7 @@ df = load_data()
 # --- Sidebar filters ---
 
 # Separate 'All'
-individual_districts = [d for d in df['dtname_disp'].unique() if d.str.lower() != 'all']
+individual_districts = [d for d in df['dtname_disp'].unique() if d.lower() != 'all']
 
 # Sort function
 def sort_key(name):
@@ -67,7 +67,7 @@ sorted_districts = sorted(individual_districts, key=sort_key)
 # Combine with "All" at the top
 final_districts = ['All'] + sorted_districts
 
-selected_dt = st.sidebar.selectbox("Select District", districts)
+selected_dt = st.sidebar.selectbox("Select District", final_districts)
 
 subdistricts = ["All"] + sorted([s for s in df[df['dtname_disp'] == selected_dt]['sdtname'].unique() if s != "All"])
 selected_sdt = st.sidebar.selectbox("Select Block", subdistricts)
