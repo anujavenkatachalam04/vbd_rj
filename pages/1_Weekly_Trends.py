@@ -67,7 +67,7 @@ subplot_titles = [
     f"Max Temperature (\u00b0C) (Max Temp Threshold Lag: {fmt_lag(lag_max)})",
     f"Min Temperature (\u00b0C) (Min Temp Threshold Lag: {fmt_lag(lag_min)})",
     f"Mean Relative Humidity (%) (Rel Hum Threshold Lag: {fmt_lag(lag_hum)})",
-    f"Rainfall (mm) (Lag b/w Max Cases Week & Max Rainfall Week (Prior): {fmt_lag(lag_rainfall)})"
+    f"Rainfall (mm) (Rainfall Threshold Lag: {fmt_lag(lag_rainfall)})"
 ]
 
 fig = make_subplots(
@@ -116,7 +116,7 @@ add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highligh
 add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Max)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange")
 add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Min)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue")
 add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"] >= 60), highlight_color="green")
-add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple")
+add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=(filtered["rain_sum"].isin(range(1, 51))), highlight_color="purple")
 
 for i in range(1, 6):
     fig.update_xaxes(
@@ -159,7 +159,7 @@ st.markdown("""
 - **Max Temp**: Weeks between peak cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
 - **Min Temp**: Weeks between peak cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
 - **Rel. Humidity**: Weeks between peak cases and start of sustained RH ≥ 60% prior to peak cases.
-- **Dengue Cases**: Weeks between peak cases and start of sustained combined thresholds (Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH ≥ 60%) prior to peak cases.
-- **Rainfall**: Weeks between peak cases and week of maximum rainfall prior to peak cases.
+- **Dengue Cases**: Weeks between peak cases and start of sustained combined thresholds - Max Temp ≤ 35°C AND Min Temp ≥ 18°C AND RH ≥ 60% AND Rainfall b/w (1, 50mm) prior to peak cases.
+- **Rainfall**: Weeks between peak cases and start of sustained Rainfall >=1mm AND Rainfall <=50mm.
 """)
 
