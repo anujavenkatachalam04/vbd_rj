@@ -30,6 +30,7 @@ def load_weekly_data():
     df['dtname'] = df['dtname'].astype(str).str.strip()
     df['sdtname'] = df['sdtname'].astype(str).str.strip()
     df['dtname_disp'] = df['dtname_disp'].astype(str).str.strip()
+    df['sdtname_disp'] = df['sdtname_disp'].astype(str).str.strip()
     return df
 
 df = load_weekly_data()
@@ -37,7 +38,7 @@ df = load_weekly_data()
 # --- Sidebar filters ---
 districts = get_sorted_districts(df)
 selected_dt = st.sidebar.selectbox("Select District", districts)
-subdistricts = ["All"] + sorted([s for s in df[df['dtname_disp'] == selected_dt]['sdtname'].unique() if s != "All"])
+subdistricts = ["All"] + sorted([s for s in df[df['dtname_disp'] == selected_dt]['sdtname_disp'].unique() if s != "All"])
 selected_sdt = st.sidebar.selectbox("Select Block", subdistricts)
 
 # --- Filter based on selection ---
@@ -60,7 +61,7 @@ lag_hum = filtered["lag_hum_weeks"].iloc[0]
 lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
 
 def fmt_lag(val):
-    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Lag not found"
+    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold condition not met before case peak."
 
 subplot_titles = [
     f"Dengue Cases (All Thresholds Lag: {fmt_lag(lag_all)})",
@@ -116,7 +117,7 @@ add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highligh
 add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Max)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange")
 add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Min)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue")
 add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"] >= 60), highlight_color="green")
-add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=filtered["rain_sum"].between(1, 50, inclusive="both"), highlight_color="purple")
+add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=filtered["rain_sum"].between(7, 350, inclusive="both"), highlight_color="purple")
 
 for i in range(1, 6):
     fig.update_xaxes(
@@ -153,13 +154,13 @@ if pd.notna(pct_blocks):
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
-**Districts suffixed with 'High' report the highest cases from 2022–2024.**
+**Districts & Subdistricts suffixed with 'High' report the highest cases from 2022–2024.**
 
 **Lag Calculation:**
+- **Dengue Cases**: Weeks between peak cases and start of sustained combined thresholds - Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH ≥ 60% prior to peak cases.
 - **Max Temp**: Weeks between peak cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
 - **Min Temp**: Weeks between peak cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
 - **Rel. Humidity**: Weeks between peak cases and start of sustained RH ≥ 60% prior to peak cases.
-- **Dengue Cases**: Weeks between peak cases and start of sustained combined thresholds - Max Temp ≤ 35°C AND Min Temp ≥ 18°C AND RH ≥ 60% AND Rainfall b/w (1, 50mm) prior to peak cases.
-- **Rainfall**: Weeks between peak cases and start of sustained Rainfall >=1mm AND Rainfall <=50mm.
+- **Rainfall**: Weeks between peak cases and start of sustained Rainfall >=7mm AND Rainfall <=350mm per week.
 """)
 
