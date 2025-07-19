@@ -34,3 +34,15 @@ def get_sorted_districts(df):
             return (1, name.lower())
     sorted_districts = sorted(individual_districts, key=sort_key)
     return ['All'] + sorted_districts
+
+# --- Sort subdistrict names ---
+def get_sorted_subdistricts(df):
+    individual_subdistricts = [sd for sd in df['sdtname_disp'].unique() if sd.lower() != 'all']
+    def sort_key(name):
+        match = re.search(r'\(High - (\d+)\)', name)
+        if match:
+            return (0, int(match.group(1)))
+        else:
+            return (1, name.lower())
+    sorted_subdistricts = sorted(individual_subdistricts, key=sort_key)
+    return ['All'] + sorted_subdistricts
