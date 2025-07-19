@@ -10,7 +10,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import re
-from utils import load_drive, get_sorted_districts  # Use utils
+from utils import load_drive, get_sorted_districts, get_sorted_subdistricts  # Use utils
 
 st.set_page_config(page_title="Dengue Climate Dashboard", layout="wide")
 
