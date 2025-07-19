@@ -33,9 +33,9 @@ Use the sidebar to explore the following pages:
 - Cases: Total value for aggregation level
 
 ## Thresholds:
-- All Thresholds: Maximum Temperature ≤ 35°C **AND** Minimum Temperature ≥ 18°C **AND** Relative Humidity ≥ 60% AND Rainfall is between 1mm and 50mm.
+- All Thresholds: Maximum Temperature ≤ 35°C **AND** Minimum Temperature ≥ 18°C **OR** Relative Humidity ≥ 60%
 - Minimum Temperature ≥ 18°C
 - Maximum Temperature ≤ 35°C
 - Relative Humidity >= 60%
-- Rainfall >=1mm and <=50mm
+- Rainfall >=7mm and <=350mm
 """)
