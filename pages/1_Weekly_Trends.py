@@ -38,7 +38,7 @@ df = load_weekly_data()
 # --- Sidebar filters ---
 districts = get_sorted_districts(df)
 selected_dt = st.sidebar.selectbox("Select District", districts)
-subdistricts = ["All"] + sorted([s for s in df[df['dtname_disp'] == selected_dt]['sdtname_disp'].unique() if s != "All"])
+subdistricts = get_sorted_subdistricts(df[df['dtname_disp'] == selected_dt])
 selected_sdt = st.sidebar.selectbox("Select Block", subdistricts)
 
 # --- Filter based on selection ---
