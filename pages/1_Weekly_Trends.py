@@ -61,7 +61,7 @@ lag_hum = filtered["lag_hum_weeks"].iloc[0]
 lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
 
 def fmt_lag(val):
-    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold condition not met before case peak."
+    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold not met continuously before cases peak."
 
 subplot_titles = [
     f"Dengue Cases (All Thresholds Lag: {fmt_lag(lag_all)})",
