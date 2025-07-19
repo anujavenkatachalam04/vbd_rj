@@ -27,7 +27,7 @@ def load_drive(gdrive_secrets):
 def get_sorted_districts(df):
     individual_districts = [d for d in df['dtname_disp'].unique() if d.lower() != 'all']
     def sort_key(name):
-        match = re.search(r'\(High - (\d+)\)', name)
+        match = re.search(r'\(High District - (\d+)\)', name)
         if match:
             return (0, int(match.group(1)))
         else:
@@ -39,7 +39,7 @@ def get_sorted_districts(df):
 def get_sorted_subdistricts(df):
     individual_subdistricts = [sd for sd in df['sdtname_disp'].unique() if sd.lower() != 'all']
     def sort_key(name):
-        match = re.search(r'\(High - (\d+)\)', name)
+        match = re.search(r'\(High Block - (\d+)\)', name)
         if match:
             return (0, int(match.group(1)))
         else:
