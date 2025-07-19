@@ -42,7 +42,7 @@ subdistricts = ["All"] + sorted([s for s in df[df['dtname_disp'] == selected_dt]
 selected_sdt = st.sidebar.selectbox("Select Block", subdistricts)
 
 # --- Filter based on selection ---
-filtered = df[(df['dtname_disp'] == selected_dt) & (df['sdtname'] == selected_sdt)]
+filtered = df[(df['dtname_disp'] == selected_dt) & (df['sdtname_disp'] == selected_sdt)]
 if filtered.empty:
     st.warning("No data available for this selection.")
     st.stop()
