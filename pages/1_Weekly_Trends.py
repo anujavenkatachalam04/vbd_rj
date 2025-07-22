@@ -48,7 +48,7 @@ x_end = filtered["week_start_date"].max()
 
 # --- Extract trigger and lags ---
 trigger = filtered["trigger_date"].iloc[0]
-onset = filtered["onset_date"].iloc[0]
+onset = filtered["onset_week"].iloc[0]
 lag_all = filtered["lag_all_weeks"].iloc[0]
 lag_min = filtered["lag_min_weeks"].iloc[0]
 lag_max = filtered["lag_max_weeks"].iloc[0]
