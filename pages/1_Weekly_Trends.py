@@ -5,6 +5,7 @@ from datetime import timedelta
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from utils import load_drive, get_sorted_districts, get_sorted_subdistricts
+from datetime import timedelta
 
 st.set_page_config(page_title="Weekly Time Series - Dengue & Climate (May-Dec 2024)", layout="wide")
 
@@ -47,16 +48,21 @@ x_start = filtered["week_start_date"].min()
 x_end = filtered["week_start_date"].max()
 
 # --- Extract trigger and lags ---
+# Ensure trigger is datetime
 trigger = filtered["trigger_date"].iloc[0]
+# Ensure lag_all is valid
 lag_all = filtered["lag_all_weeks"].iloc[0]
+
+# Subtract lag in weeks from trigger to get onset
+if pd.notnull(lag_all):
+    onset = pd.to_datetime(trigger) - timedelta(weeks=int(lag_all))
+else:
+    onset = None
+
 lag_min = filtered["lag_min_weeks"].iloc[0]
 lag_max = filtered["lag_max_weeks"].iloc[0]
 lag_hum = filtered["lag_hum_weeks"].iloc[0]
 lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
-if pd.notnull(lag_all):
-    onset = trigger - timedelta(weeks=int(lag_all))
-else:
-    onset = None
     
 
 def fmt_lag(val):
