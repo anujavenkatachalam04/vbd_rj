@@ -50,14 +50,21 @@ x_end = filtered["week_start_date"].max()
 # --- Extract trigger and lags ---
 # Ensure trigger is datetime
 trigger = filtered["trigger_date"].iloc[0]
-# Ensure lag_all is valid
-lag_all = filtered["lag_all_weeks"].iloc[0]
 
-# Subtract lag in weeks from trigger to get onset
-if pd.notnull(lag_all):
-    onset = pd.to_datetime(trigger) - timedelta(weeks=int(lag_all))
-else:
-    onset = None
+# Extract lags
+lag_all = filtered["lag_all_weeks"].iloc[0]
+lag_min = filtered["lag_min_weeks"].iloc[0]
+lag_max = filtered["lag_max_weeks"].iloc[0]
+lag_hum = filtered["lag_hum_weeks"].iloc[0]
+lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
+
+# Compute onsets safely
+onset_all = pd.to_datetime(trigger) - timedelta(weeks=int(lag_all)) if pd.notnull(lag_all) else None
+onset_min = pd.to_datetime(trigger) - timedelta(weeks=int(lag_min)) if pd.notnull(lag_min) else None
+onset_max = pd.to_datetime(trigger) - timedelta(weeks=int(lag_max)) if pd.notnull(lag_max) else None
+onset_hum = pd.to_datetime(trigger) - timedelta(weeks=int(lag_hum)) if pd.notnull(lag_hum) else None
+onset_rainfall = pd.to_datetime(trigger) - timedelta(weeks=int(lag_rainfall)) if pd.notnull(lag_rainfall) else None
+
 
 lag_min = filtered["lag_min_weeks"].iloc[0]
 lag_max = filtered["lag_max_weeks"].iloc[0]
@@ -85,7 +92,8 @@ fig = make_subplots(
 )
 
 # --- Trace plotting helper ---
-def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, highlight_color=None, lag_val=None):
+def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, highlight_color=None, lag_val=None, onset_date=None):
+
     fig.add_trace(go.Scatter(
         x=week_dates,
         y=filtered[y_data_col],
@@ -126,20 +134,32 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
         line=dict(color="black", width=2, dash="dash"),
         row=row, col=col
     )
-
-    if onset is not None:
+    if onset_date is not None:
         fig.add_vline(
-                x=onset,
-                line=dict(color="red", width=2, dash="dot"),
-                row=row, col=col
-            )
+        x=onset_date,
+        line=dict(color="red", width=2, dash="dot"),
+        row=row, col=col)
 
 # --- Add all traces ---
-add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highlight_cond=(filtered["meets_threshold"]), highlight_color="red", lag_val=lag_all)
-add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Mean)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange", lag_val=lag_max)
-add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Mean)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue", lag_val=lag_min)
-add_trace(4, 1, "relative_humidity_2m_mean", "Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"].between(60, 80)), highlight_color="green", lag_val=lag_hum)
-add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=filtered["rain_sum"].between(0.5, 150, inclusive="both"), highlight_color="purple", lag_val=lag_rainfall)
+add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson",
+          highlight_cond=(filtered["meets_threshold"]), highlight_color="red",
+          lag_val=lag_all, onset_date=onset_all)
+
+add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Mean)", "orange",
+          highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange",
+          lag_val=lag_max, onset_date=onset_max)
+
+add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Mean)", "blue",
+          highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue",
+          lag_val=lag_min, onset_date=onset_min)
+
+add_trace(4, 1, "relative_humidity_2m_mean", "Relative Humidity (%) (Weekly Mean)", "green",
+          highlight_cond=(filtered["relative_humidity_2m_mean"].between(60, 80)), highlight_color="green",
+          lag_val=lag_hum, onset_date=onset_hum)
+
+add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple",
+          highlight_cond=filtered["rain_sum"].between(0.5, 150, inclusive="both"), highlight_color="purple",
+          lag_val=lag_rainfall, onset_date=onset_rainfall)
 
 # --- X-axis formatting ---
 for i in range(1, 6):
