@@ -61,7 +61,7 @@ lag_hum = filtered["lag_hum_weeks"].iloc[0]
 lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
 
 def fmt_lag(val):
-    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold not met continuously before trigger week"
+    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold was not met continuously before trigger week"
 
 subplot_titles = [
     f"Dengue Cases (Lag - All conditions): {fmt_lag(lag_all)}",
@@ -78,7 +78,7 @@ fig = make_subplots(
 )
 
 # --- Add Traces ---
-def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, highlight_color=None):
+def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, highlight_color=None, lag_val=None):
     fig.add_trace(go.Scatter(
         x=week_dates,
         y=filtered[y_data_col],
@@ -120,11 +120,20 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
         row=row, col=col
     )
 
-add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highlight_cond=(filtered["meets_threshold"]), highlight_color="red")
-add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Mean)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange")
-add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Mean)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue")
-add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"].between(60, 80)), highlight_color="green")
-add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=filtered["rain_sum"].between(0.5, 150, inclusive="both"), highlight_color="purple")
+    # --- Add vertical threshold line ---
+    if pd.notna(lag_val):
+        threshold_date = trigger - timedelta(weeks=int(lag_val))
+        fig.add_vline(
+            x=threshold_date,
+            line=dict(color="blue", width=2, dash="dot"),
+            row=row, col=col
+        )
+
+add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highlight_cond=(filtered["meets_threshold"]), highlight_color="red", lag_val=lag_all)
+add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Mean)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange", lag_val=lag_max)
+add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Mean)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue", lag_val=lag_min)
+add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"].between(60, 80)), highlight_color="green", lag_val=lag_hum)
+add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=filtered["rain_sum"].between(0.5, 150, inclusive="both"), highlight_color="purple", lag_val=lag_rainfall)
 
 for i in range(1, 6):
     fig.update_xaxes(
@@ -157,11 +166,11 @@ st.plotly_chart(fig, use_container_width=True)
 pct_blocks = filtered["pct_blocks_with_cases"].iloc[0] if "pct_blocks_with_cases" in filtered.columns else None
 if pd.notna(pct_blocks):
     st.markdown(f"<div style='font-size: 14px; color: gray; margin-top: -20px;'>"
-                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between May 2024 and June 2024."
+                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between May 2024 and December 2024."
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
-**Districts & Subdistricts suffixed with 'High' report the highest cases between May 2024 and June 2024.**
+**Districts & Subdistricts suffixed with 'High' report the highest cases between May 2024 and December 2024.**
 
 **Lag Calculation:**
 - **Dengue Cases**: Weeks between sustained rise in cases and start of sustained combined thresholds — Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH between 60% and 80%.
