@@ -117,7 +117,7 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
         row=row, col=col
     )
 
-    if onset is not None:
+    if lag is not None and not pd.isna(lag):
         fig.add_vline(
                 x=onset,
                 line=dict(color="red", width=2, dash="dot"),
