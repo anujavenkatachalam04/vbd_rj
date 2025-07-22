@@ -48,6 +48,7 @@ x_end = filtered["week_start_date"].max()
 
 # --- Extract trigger and lags ---
 trigger = filtered["trigger_date"].iloc[0]
+onset = filtered["onset_date"].iloc[0]
 lag_all = filtered["lag_all_weeks"].iloc[0]
 lag_min = filtered["lag_min_weeks"].iloc[0]
 lag_max = filtered["lag_max_weeks"].iloc[0]
@@ -116,36 +117,12 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
         row=row, col=col
     )
 
-    if lag_val is not None and pd.notna(lag_val):
-        try:
-            # Force threshold_date to match an actual date in the x-axis
-            threshold_date = trigger - timedelta(weeks=int(lag_val))
-            closest_date = min(week_dates, key=lambda d: abs(d - threshold_date))  # Snap to nearest
-    
-            fig.add_vline(
-                x=closest_date,
+    if onset is not None:
+        fig.add_vline(
+                x=onset,
                 line=dict(color="red", width=2, dash="dot"),
                 row=row, col=col
             )
-
-            fig.add_annotation(
-                x=closest_date,
-                y=filtered[y_data_col].max() * 0.95 if pd.notna(filtered[y_data_col].max()) else 0,
-                text="Threshold Start",
-                showarrow=True,
-                arrowhead=1,
-                ax=0,
-                ay=-40,
-                font=dict(color="red", size=10),
-                xanchor="left",
-                yanchor="top",
-                row=row, col=col
-            )
-
-        except Exception as e:
-            print(f"[WARN] Skipping threshold line for {trace_name}: {e}")
-
-
 
 # --- Add all traces ---
 add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highlight_cond=(filtered["meets_threshold"]), highlight_color="red", lag_val=lag_all)
