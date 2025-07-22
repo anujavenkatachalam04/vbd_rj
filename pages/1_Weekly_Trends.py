@@ -121,13 +121,17 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
     )
 
     # --- Add vertical threshold line ---
-    if pd.notna(lag_val):
-        threshold_date = trigger - timedelta(weeks=int(lag_val))
-        fig.add_vline(
-            x=threshold_date,
-            line=dict(color="blue", width=2, dash="dot"),
-            row=row, col=col
-        )
+    if lag_val is not None and pd.notna(lag_val):
+        try:
+            threshold_date = trigger - timedelta(weeks=int(lag_val))
+            fig.add_vline(
+                x=threshold_date,
+                line=dict(color="blue", width=2, dash="dot"),
+                row=row, col=col
+            )
+        except (ValueError, TypeError) as e:
+            print(f"[WARN] Skipping threshold line for '{trace_name}' due to invalid lag_val={lag_val}: {e}")
+
 
 add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highlight_cond=(filtered["meets_threshold"]), highlight_color="red", lag_val=lag_all)
 add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Mean)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange", lag_val=lag_max)
