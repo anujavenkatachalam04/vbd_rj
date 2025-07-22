@@ -5,7 +5,7 @@ st.set_page_config(page_title="Dengue-Climate Dashboard", layout="wide")
 st.title("Dengue & Climate Trends in Rajasthan")
 
 st.markdown("""
-Welcome to the Dengue-Climate Dashboard for Rajasthan.
+Welcome to the Dengue-Climate Dashboard for Rajasthan!
 ---
 
 ### Navigation:
@@ -15,7 +15,7 @@ Use the sidebar to explore the following pages:
 - **Monthly Trends** (2022-2024): Monthly Time Series charts for each block within a district.
 ---
 
-### Data Sources:
+### Datasets:
 - Dengue Cases (NVBDCP)
-- Climate data: (ERA5) extracted from the open-meteo API for 10km x 10km grid, and aggregated at the district/block/month/week levels.
+- Climate data (ERA5) extracted from the open-meteo API for 10km x 10km grid, and aggregated at the district/block/month/week levels.
 """)
