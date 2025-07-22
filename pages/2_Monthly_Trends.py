@@ -12,7 +12,7 @@ from pydrive2.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
 import re
 
-st.set_page_config(page_title="Monthly Dengue Trends", layout="wide")
+st.set_page_config(page_title="Monthly Dengue Trends (2022-2024)", layout="wide")
 
 # --- Load Google Drive credentials and file ---
 @st.cache_resource
@@ -59,11 +59,11 @@ fig = make_subplots(
     rows=5, cols=1, shared_xaxes=False,
     vertical_spacing=0.05,
   subplot_titles = [
-    "Dengue Cases",
-    "Max Temperature",
-    "Min Temperature",
+    "Total Dengue Cases",
+    "Mean Maximum Temperature",
+    "Mean Minimum Temperature",
     "Mean Relative Humidity (%)",
-    "Rainfall (mm)"
+    "Total Rainfall (mm)"
 ]
 )
 
@@ -91,8 +91,8 @@ def add_trace(row, col, y_data_col, trace_name, color):
     )
 
 add_trace(1, 1, "dengue_cases", "Dengue Cases (Monthly Sum)", "red")
-add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Monthly Max)", "orange")
-add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Monthly Min)", "blue")
+add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Monthly Mean)", "orange")
+add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Monthly Mean)", "blue")
 add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Monthly Mean)", "green")
 add_trace(5, 1, "rain_sum", "Rainfall (mm) (Monthly Sum)", "purple")
 
@@ -102,7 +102,7 @@ for i in range(1, 6):
         tickangle=-45,
         tickformat="%b\n%Y",
         tickmode="linear",
-        dtick="M3",  # Show every 3rd month
+        dtick="M2",  # Show every 2nd month
         tickfont=dict(size=10, color='black'),
         ticks="outside",
         showgrid=True,
