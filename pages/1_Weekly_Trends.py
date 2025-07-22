@@ -12,7 +12,7 @@ from plotly.subplots import make_subplots
 import re
 from utils import load_drive, get_sorted_districts, get_sorted_subdistricts  # Use utils
 
-st.set_page_config(page_title="Dengue Climate Dashboard", layout="wide")
+st.set_page_config(page_title="Weekly Time Series - Dengue & Climate (May-Dec 2024 ", layout="wide")
 
 # --- Load data from Google Drive only if not downloaded ---
 csv_path = "time_series_dashboard.csv"
@@ -64,11 +64,11 @@ def fmt_lag(val):
     return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold not met continuously before week of max cases"
 
 subplot_titles = [
-    f"Dengue Cases (All Thresholds Lag: {fmt_lag(lag_all)})",
-    f"Max Temperature (\u00b0C) (Max Temp Threshold Lag: {fmt_lag(lag_max)})",
-    f"Min Temperature (\u00b0C) (Min Temp Threshold Lag: {fmt_lag(lag_min)})",
-    f"Mean Relative Humidity (%) (Rel Hum Threshold Lag: {fmt_lag(lag_hum)})",
-    f"Rainfall (mm) (Rainfall Threshold Lag: {fmt_lag(lag_rainfall)})"
+    f"Dengue Cases (Lag - All conditions): {fmt_lag(lag_all)})",
+    f"Mean Maximum Temperature (\u00b0C) (Lag: {fmt_lag(lag_max)})",
+    f"Mean Minimum Temperature (\u00b0C) (Lag: {fmt_lag(lag_min)})",
+    f"Mean Relative Humidity (%) (Lag: {fmt_lag(lag_hum)})",
+    f"Total Rainfall (mm) (Lag: {fmt_lag(lag_rainfall)})"
 ]
 
 fig = make_subplots(
@@ -114,10 +114,10 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
             )
 
 add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highlight_cond=(filtered["meets_threshold"]), highlight_color="red")
-add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Max)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange")
-add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Min)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue")
+add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Mean)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange")
+add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Mean)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue")
 add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"] >= 60), highlight_color="green")
-add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=filtered["rain_sum"].between(7, 350, inclusive="both"), highlight_color="purple")
+add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=filtered["rain_sum"].between(0.5, 150, inclusive="both"), highlight_color="purple")
 
 for i in range(1, 6):
     fig.update_xaxes(
@@ -136,7 +136,7 @@ for i in range(1, 6):
 fig.update_layout(
     height=2100,
     width=3000,
-    title_text=f"Weekly Dengue and Climate Trends (June-December 2024) — Block: {selected_sdt}, District: {selected_dt}",
+    title_text=f"Weekly Dengue and Climate Trends (May-December 2024) — Block: {selected_sdt}, District: {selected_dt}",
     showlegend=False,
     margin=dict(t=80, b=100),
     template=None,
@@ -150,17 +150,17 @@ st.plotly_chart(fig, use_container_width=True)
 pct_blocks = filtered["pct_blocks_with_cases"].iloc[0] if "pct_blocks_with_cases" in filtered.columns else None
 if pd.notna(pct_blocks):
     st.markdown(f"<div style='font-size: 14px; color: gray; margin-top: -20px;'>"
-                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between June 2024 and June 2025."
+                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between May 2024 and June 2024."
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
-**Districts & Subdistricts suffixed with 'High' report the highest cases from 2022–2024.**
+**Districts & Subdistricts suffixed with 'High' report the highest cases between May 2024 and June 2024.**
 
 **Lag Calculation:**
-- **Dengue Cases**: Weeks between peak cases and start of sustained combined thresholds - Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH ≥ 60% prior to peak cases.
-- **Max Temp**: Weeks between peak cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
-- **Min Temp**: Weeks between peak cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
-- **Rel. Humidity**: Weeks between peak cases and start of sustained RH ≥ 60% prior to peak cases.
-- **Rainfall**: Weeks between peak cases and start of sustained Rainfall >=7mm AND Rainfall <=350mm per week.
+- **Dengue Cases**: Weeks between sustained rise in cases and start of sustained combined thresholds - Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH ≥ 60%.
+- **Max Temp**: Weeks between sustained rise in cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
+- **Min Temp**: Weeks between sustained rise in cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
+- **Rel. Humidity**: Weeks between sustained rise in cases and start of sustained RH ≥ 60% prior to peak cases.
+- **Rainfall**: Weeks between sustained rise in cases and start of sustained Rainfall >=0.5mm AND Rainfall <=150mm per week.
 """)
 
