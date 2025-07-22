@@ -117,33 +117,33 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
     )
 
     if lag_val is not None and pd.notna(lag_val):
-    try:
-        # Force threshold_date to match an actual date in the x-axis
-        threshold_date = trigger - timedelta(weeks=int(lag_val))
-        closest_date = min(week_dates, key=lambda d: abs(d - threshold_date))  # Snap to nearest
+        try:
+            # Force threshold_date to match an actual date in the x-axis
+            threshold_date = trigger - timedelta(weeks=int(lag_val))
+            closest_date = min(week_dates, key=lambda d: abs(d - threshold_date))  # Snap to nearest
+    
+            fig.add_vline(
+                x=closest_date,
+                line=dict(color="red", width=2, dash="dot"),
+                row=row, col=col
+            )
 
-        fig.add_vline(
-            x=closest_date,
-            line=dict(color="red", width=2, dash="dot"),
-            row=row, col=col
-        )
+            fig.add_annotation(
+                x=closest_date,
+                y=filtered[y_data_col].max() * 0.95 if pd.notna(filtered[y_data_col].max()) else 0,
+                text="Threshold Start",
+                showarrow=True,
+                arrowhead=1,
+                ax=0,
+                ay=-40,
+                font=dict(color="red", size=10),
+                xanchor="left",
+                yanchor="top",
+                row=row, col=col
+            )
 
-        fig.add_annotation(
-            x=closest_date,
-            y=filtered[y_data_col].max() * 0.95 if pd.notna(filtered[y_data_col].max()) else 0,
-            text="Threshold Start",
-            showarrow=True,
-            arrowhead=1,
-            ax=0,
-            ay=-40,
-            font=dict(color="red", size=10),
-            xanchor="left",
-            yanchor="top",
-            row=row, col=col
-        )
-
-    except Exception as e:
-        print(f"[WARN] Skipping threshold line for {trace_name}: {e}")
+        except Exception as e:
+            print(f"[WARN] Skipping threshold line for {trace_name}: {e}")
 
 
 
