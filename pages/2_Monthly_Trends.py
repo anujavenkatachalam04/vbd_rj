@@ -102,7 +102,7 @@ for i in range(1, 6):
         tickangle=-45,
         tickformat="%b\n%Y",
         tickmode="linear",
-        dtick="M2",  # Show every 2nd month
+        dtick="M1",  # Show  month
         tickfont=dict(size=10, color='black'),
         ticks="outside",
         showgrid=True,
