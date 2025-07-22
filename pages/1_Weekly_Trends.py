@@ -48,12 +48,17 @@ x_end = filtered["week_start_date"].max()
 
 # --- Extract trigger and lags ---
 trigger = filtered["trigger_date"].iloc[0]
-onset = filtered["onset_week"].iloc[0]
+onset = trigger - timedelta(week=2)
 lag_all = filtered["lag_all_weeks"].iloc[0]
 lag_min = filtered["lag_min_weeks"].iloc[0]
 lag_max = filtered["lag_max_weeks"].iloc[0]
 lag_hum = filtered["lag_hum_weeks"].iloc[0]
 lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
+if pd.notnull(lag_all):
+    onset = trigger - timedelta(weeks=int(lag_all))
+else:
+    onset = None
+    
 
 def fmt_lag(val):
     return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold not met continuously before trigger week"
@@ -117,7 +122,7 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
         row=row, col=col
     )
 
-    if lag_val is not None and pd.notna(lag_val):
+    if onset is not None:
         fig.add_vline(
                 x=onset,
                 line=dict(color="red", width=2, dash="dot"),
