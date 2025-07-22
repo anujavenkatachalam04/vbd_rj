@@ -12,7 +12,7 @@ from plotly.subplots import make_subplots
 import re
 from utils import load_drive, get_sorted_districts, get_sorted_subdistricts  # Use utils
 
-st.set_page_config(page_title="Weekly Time Series - Dengue & Climate (May-Dec 2024 ", layout="wide")
+st.set_page_config(page_title="Weekly Time Series - Dengue & Climate (May-Dec 2024)", layout="wide")
 
 # --- Load data from Google Drive only if not downloaded ---
 csv_path = "time_series_dashboard.csv"
@@ -61,12 +61,12 @@ lag_hum = filtered["lag_hum_weeks"].iloc[0]
 lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
 
 def fmt_lag(val):
-    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold not met continuously before week of max cases"
+    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold not met continuously before trigger week"
 
 subplot_titles = [
-    f"Dengue Cases (Lag - All conditions): {fmt_lag(lag_all)})",
-    f"Mean Maximum Temperature (\u00b0C) (Lag: {fmt_lag(lag_max)})",
-    f"Mean Minimum Temperature (\u00b0C) (Lag: {fmt_lag(lag_min)})",
+    f"Dengue Cases (Lag - All conditions): {fmt_lag(lag_all)}",
+    f"Mean Maximum Temperature (°C) (Lag: {fmt_lag(lag_max)})",
+    f"Mean Minimum Temperature (°C) (Lag: {fmt_lag(lag_min)})",
     f"Mean Relative Humidity (%) (Lag: {fmt_lag(lag_hum)})",
     f"Total Rainfall (mm) (Lag: {fmt_lag(lag_rainfall)})"
 ]
@@ -113,10 +113,17 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
                 row=row, col=col
             )
 
+    # --- Add vertical trigger line ---
+    fig.add_vline(
+        x=trigger,
+        line=dict(color="black", width=2, dash="dash"),
+        row=row, col=col
+    )
+
 add_trace(1, 1, "dengue_cases", "Dengue Cases (Weekly Sum)", "crimson", highlight_cond=(filtered["meets_threshold"]), highlight_color="red")
 add_trace(2, 1, "temperature_2m_max", "Max Temperature (°C) (Weekly Mean)", "orange", highlight_cond=(filtered["temperature_2m_max"] <= 35), highlight_color="orange")
 add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Mean)", "blue", highlight_cond=(filtered["temperature_2m_min"] >= 18), highlight_color="blue")
-add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"] >= 60), highlight_color="green")
+add_trace(4, 1, "relative_humidity_2m_mean", "Mean Relative Humidity (%) (Weekly Mean)", "green", highlight_cond=(filtered["relative_humidity_2m_mean"].between(60, 80)), highlight_color="green")
 add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple", highlight_cond=filtered["rain_sum"].between(0.5, 150, inclusive="both"), highlight_color="purple")
 
 for i in range(1, 6):
@@ -157,10 +164,9 @@ st.markdown("""
 **Districts & Subdistricts suffixed with 'High' report the highest cases between May 2024 and June 2024.**
 
 **Lag Calculation:**
-- **Dengue Cases**: Weeks between sustained rise in cases and start of sustained combined thresholds - Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH ≥ 60%.
-- **Max Temp**: Weeks between sustained rise in cases and start of sustained Max Temp ≤ 35°C prior to peak cases.
-- **Min Temp**: Weeks between sustained rise in cases and start of sustained Min Temp ≥ 18°C prior to peak cases.
-- **Rel. Humidity**: Weeks between sustained rise in cases and start of sustained RH ≥ 60% prior to peak cases.
-- **Rainfall**: Weeks between sustained rise in cases and start of sustained Rainfall >=0.5mm AND Rainfall <=150mm per week.
+- **Dengue Cases**: Weeks between sustained rise in cases and start of sustained combined thresholds — Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH between 60% and 80%.
+- **Max Temp**: Weeks between trigger week and start of sustained Max Temp ≤ 35°C.
+- **Min Temp**: Weeks between trigger week and start of sustained Min Temp ≥ 18°C.
+- **Rel. Humidity**: Weeks between trigger week and start of sustained RH between 60% and 80%.
+- **Rainfall**: Weeks between trigger week and start of sustained Rainfall ≥ 0.5mm AND ≤ 150mm per week.
 """)
-
