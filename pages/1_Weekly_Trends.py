@@ -64,11 +64,11 @@ def fmt_lag(val):
     return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold not met continuously before trigger week"
 
 subplot_titles = [
-    f"Dengue Cases (Lag - All conditions): {fmt_lag(lag_all)}",
-    f"Mean Maximum Temperature (°C) (Lag: {fmt_lag(lag_max)})",
-    f"Mean Minimum Temperature (°C) (Lag: {fmt_lag(lag_min)})",
-    f"Mean Relative Humidity (%) (Lag: {fmt_lag(lag_hum)})",
-    f"Total Rainfall (mm) (Lag: {fmt_lag(lag_rainfall)})"
+    f"Dengue Cases (Mean Maximum Temperature ≤ 35°C AND Mean Minimum Temperature ≥ 18°C OR Relative Humidity between 60% and 80%: {fmt_lag(lag_all)}",
+    f"Mean Maximum Temperature (°C) (Threshold:≤ 35°C; Lag: {fmt_lag(lag_max)})",
+    f"Mean Minimum Temperature (°C) (Threshold:≥ 18°C; Lag: {fmt_lag(lag_min)})",
+    f"Mean Relative Humidity (%) (Threshold:between(60, 80); Lag: {fmt_lag(lag_hum)})",
+    f"Total Rainfall (mm) (Threshold:between(0.5, 150); Lag: {fmt_lag(lag_rainfall)})"
 ]
 
 fig = make_subplots(
@@ -170,12 +170,31 @@ if pd.notna(pct_blocks):
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
-**Districts & Subdistricts suffixed with 'High' report the highest cases between May 2024 and December 2024.**
+**Trigger Date: Week where a sustained sharp rise in dengue cases begins**
+| Step | Description |
+|------|-------------|
+| 1    | Identify the week with **maximum dengue cases**. |
+| 2    | Iterate **backwards** from that week to find the last week where dengue cases show a **strict decrease** each week. |
+| 3    | From that point onward (i.e., when cases start to rise again), look for a sequence of **4 consecutive weeks** where each week has at least a **10-case increase** from the previous week. |
+| 4    | The **first week** of this 4-week rising period is marked as the **trigger date**. |
+| 5    | If this is not found for a block, the trigger date is the minimum date when cases start to strictly increase.|
 
-**Lag Calculation:**
-- **Dengue Cases**: Weeks between sharp & sustained rise in cases and start of sustained combined thresholds — Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH between 60% and 80%.
-- **Max Temp**: Weeks between trigger week and start of sustained Max Temp ≤ 35°C.
-- **Min Temp**: Weeks between trigger week and start of sustained Min Temp ≥ 18°C.
-- **Rel. Humidity**: Weeks between trigger week and start of sustained RH between 60% and 80%.
-- **Rainfall**: Weeks between trigger week and start of sustained Rainfall ≥ 0.5mm AND ≤ 150mm per week.
+** Districts with High Dengue Cases:
+| S.No | District     | Dengue Cases |
+|------|--------------|--------------|
+| 1    | Jaipur       | 1601.0       |
+| 2    | Udaipur      | 1170.0       |
+| 3    | Bikaner      | 816.0        |
+| 4    | Dausa        | 514.0        |
+| 5    | Ganganagar   | 446.0        |
+
+** Subdistricts with High Dengue Cases:
+| Rank | District    | Subdistrict | Dengue Cases | 
+|------|-------------|-------------|---------------|
+| 1    | Jaipur      | Jaipur      | 780.0         | 
+| 2    | Udaipur     | Girwa       | 748.0         | 
+| 3    | Bikaner     | Bikaner     | 546.0         |
+| 4    | Jaipur      | Sanganer    | 424.0         | 
+| 5    | Ganganagar  | Ganganagar  | 352.0         | 
+| 6    | Kota        | Ladpura     | 325.0         | 
 """)
