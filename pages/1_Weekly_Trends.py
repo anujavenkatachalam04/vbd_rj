@@ -61,7 +61,7 @@ lag_hum = filtered["lag_hum_weeks"].iloc[0]
 lag_rainfall = filtered["lag_rainfall_weeks"].iloc[0]
 
 def fmt_lag(val):
-    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold was not met continuously before trigger week"
+    return f"{int(val)} week{'s' if int(val) != 1 else ''}" if pd.notna(val) else "Threshold not met continuously before trigger week"
 
 subplot_titles = [
     f"Dengue Cases (Lag - All conditions): {fmt_lag(lag_all)}",
@@ -173,7 +173,7 @@ st.markdown("""
 **Districts & Subdistricts suffixed with 'High' report the highest cases between May 2024 and December 2024.**
 
 **Lag Calculation:**
-- **Dengue Cases**: Weeks between sustained rise in cases and start of sustained combined thresholds — Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH between 60% and 80%.
+- **Dengue Cases**: Weeks between sharp & sustained rise in cases and start of sustained combined thresholds — Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH between 60% and 80%.
 - **Max Temp**: Weeks between trigger week and start of sustained Max Temp ≤ 35°C.
 - **Min Temp**: Weeks between trigger week and start of sustained Min Temp ≥ 18°C.
 - **Rel. Humidity**: Weeks between trigger week and start of sustained RH between 60% and 80%.
