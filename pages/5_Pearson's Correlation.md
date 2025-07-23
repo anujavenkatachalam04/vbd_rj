@@ -1,4 +1,4 @@
-# Pearson's Correlation - Dengue & Climate (Jul–Dec 2024)
+# Pearson's Correlation for Threshold (+ Lag (9 weeks) - Dengue & Climate (Jul–Dec 2024)
 
 ## Objective
 To explore the relationship between **block-level dengue cases** and **lagged climate variables** during the period **July–December 2024**, focusing on lags between climate exposure and disease onset.
@@ -27,9 +27,7 @@ To explore the relationship between **block-level dengue cases** and **lagged cl
 
 4. **Threshold Check**
    - Climate data included only if the threshold condition was met on **≥4 of the 7 days** leading up to the lag window:
-     - `temperature_2m_min ≥ 18°C`
-     - `temperature_2m_max ≤ 35°C`
-     - `relative_humidity_2m_mean` between **60% and 80%**
+     - `temperature_2m_min ≥ 18°C` AND `temperature_2m_max ≤ 35°C` OR `relative_humidity_2m_mean` between **60% and 80%**
 
 5. **Analysis**
    - Computed **Pearson correlation coefficients** between dengue case counts and lagged climate values with a lag of 63 days (9 weeks) based on the EDA
