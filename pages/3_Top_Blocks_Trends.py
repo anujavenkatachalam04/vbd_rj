@@ -45,50 +45,97 @@ if block_df.empty:
 def plot_temperature(df):
     fig = go.Figure()
 
-    fig.add_bar(x=df["iso_year_week"], y=df["dengue_cases"], name="Dengue Cases", marker_color="lightcoral", yaxis="y1")
-    fig.add_trace(go.Scatter(x=df["iso_year_week"], y=df["temperature_2m_max"], name="Temp Max", mode="lines+markers", line=dict(color="red"), yaxis="y2"))
-    fig.add_trace(go.Scatter(x=df["iso_year_week"], y=df["temperature_2m_mean"], name="Temp Mean", mode="lines+markers", line=dict(color="orange"), yaxis="y2"))
-    fig.add_trace(go.Scatter(x=df["iso_year_week"], y=df["temperature_2m_min"], name="Temp Min", mode="lines+markers", line=dict(color="blue"), yaxis="y2"))
+    # Bars: Dengue Cases
+    fig.add_bar(x=df["week_start_date"], y=df["dengue_cases"],
+                name="Dengue Cases", marker_color="lightcoral", yaxis="y1")
 
+    # Lines: Temperature
+    fig.add_trace(go.Scatter(x=df["week_start_date"], y=df["temperature_2m_max"],
+                             name="Temp Max", mode="lines+markers",
+                             line=dict(color="red"), yaxis="y2"))
+    fig.add_trace(go.Scatter(x=df["week_start_date"], y=df["temperature_2m_mean"],
+                             name="Temp Mean", mode="lines+markers",
+                             line=dict(color="orange"), yaxis="y2"))
+    fig.add_trace(go.Scatter(x=df["week_start_date"], y=df["temperature_2m_min"],
+                             name="Temp Min", mode="lines+markers",
+                             line=dict(color="blue"), yaxis="y2"))
+
+    # Highlights
+    for dt in df[df["temperature_2m_max"] <= 35]["week_start_date"]:
+        fig.add_vrect(x0=dt, x1=dt + pd.Timedelta(days=6),
+                      fillcolor="orange", opacity=0.15, line_width=0)
+    for dt in df[df["temperature_2m_min"] >= 18]["week_start_date"]:
+        fig.add_vrect(x0=dt, x1=dt + pd.Timedelta(days=6),
+                      fillcolor="blue", opacity=0.15, line_width=0)
+
+    # Layout
     fig.update_layout(
         title="Temperature and Dengue Cases",
-        xaxis_title="Week",
+        xaxis=dict(title="Week", tickangle=-45),
         yaxis=dict(title="Dengue Cases"),
         yaxis2=dict(title="Temperature (°C)", overlaying="y", side="right"),
         legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center"),
-        height=500
+        height=500,
+        plot_bgcolor="white",
+        paper_bgcolor="white"
     )
     return fig
 
 def plot_rainfall(df):
     fig = go.Figure()
-    fig.add_bar(x=df["iso_year_week"], y=df["dengue_cases"], name="Dengue Cases", marker_color="lightcoral", yaxis="y1")
-    fig.add_trace(go.Scatter(x=df["iso_year_week"], y=df["rain_sum"], name="Rainfall (mm)", mode="lines+markers", line=dict(color="dodgerblue"), yaxis="y2"))
+
+    fig.add_bar(x=df["week_start_date"], y=df["dengue_cases"],
+                name="Dengue Cases", marker_color="lightcoral", yaxis="y1")
+
+    fig.add_trace(go.Scatter(x=df["week_start_date"], y=df["rain_sum"],
+                             name="Rainfall (mm)", mode="lines+markers",
+                             line=dict(color="dodgerblue"), yaxis="y2"))
+
+    # Highlight thresholds
+    for dt in df[df["rain_sum"].between(0.5, 150)]["week_start_date"]:
+        fig.add_vrect(x0=dt, x1=dt + pd.Timedelta(days=6),
+                      fillcolor="purple", opacity=0.15, line_width=0)
 
     fig.update_layout(
         title="Rainfall and Dengue Cases",
-        xaxis_title="Week",
+        xaxis=dict(title="Week", tickangle=-45),
         yaxis=dict(title="Dengue Cases"),
         yaxis2=dict(title="Rainfall (mm)", overlaying="y", side="right"),
         legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center"),
-        height=500
+        height=500,
+        plot_bgcolor="white",
+        paper_bgcolor="white"
     )
     return fig
+
 
 def plot_humidity(df):
     fig = go.Figure()
-    fig.add_bar(x=df["iso_year_week"], y=df["dengue_cases"], name="Dengue Cases", marker_color="lightcoral", yaxis="y1")
-    fig.add_trace(go.Scatter(x=df["iso_year_week"], y=df["relative_humidity_2m_mean"], name="Humidity (%)", mode="lines+markers", line=dict(color="green"), yaxis="y2"))
+
+    fig.add_bar(x=df["week_start_date"], y=df["dengue_cases"],
+                name="Dengue Cases", marker_color="lightcoral", yaxis="y1")
+
+    fig.add_trace(go.Scatter(x=df["week_start_date"], y=df["relative_humidity_2m_mean"],
+                             name="Humidity (%)", mode="lines+markers",
+                             line=dict(color="green"), yaxis="y2"))
+
+    # Highlight thresholds
+    for dt in df[df["relative_humidity_2m_mean"].between(60, 80)]["week_start_date"]:
+        fig.add_vrect(x0=dt, x1=dt + pd.Timedelta(days=6),
+                      fillcolor="green", opacity=0.15, line_width=0)
 
     fig.update_layout(
         title="Relative Humidity and Dengue Cases",
-        xaxis_title="Week",
+        xaxis=dict(title="Week", tickangle=-45),
         yaxis=dict(title="Dengue Cases"),
         yaxis2=dict(title="Humidity (%)", overlaying="y", side="right"),
         legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center"),
-        height=500
+        height=500,
+        plot_bgcolor="white",
+        paper_bgcolor="white"
     )
     return fig
+
 
 # --- Streamlit layout ---
 st.title("Dengue and Climate Conditions per Block")
