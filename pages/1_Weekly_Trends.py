@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from utils import load_drive, get_sorted_districts, get_sorted_subdistricts
 from datetime import timedelta
 
-st.set_page_config(page_title="Weekly Time Series - Dengue & Climate (Jul-Dec 2024)", layout="wide")
+st.set_page_config(page_title="Weekly Time Series - Dengue & Climate", layout="wide")
 
 # --- Load data from Google Drive only if not already downloaded ---
 csv_path = "time_series_dashboard.csv"
@@ -179,7 +179,7 @@ for i in range(1, 6):
 # --- Layout ---
 fig.update_layout(
     title=dict(
-        text=f"Weekly Dengue and Climate Trends (Jul–Dec 2024) — Block: {selected_sdt}, District: {selected_dt}",
+        text=f"Weekly Trends (Jul–Dec 2024) — Block: {selected_sdt}, District: {selected_dt}",
         font=dict(size=24, color='black'),
         x=0.5,  # Center the title
         xanchor='center'
