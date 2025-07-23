@@ -39,7 +39,7 @@ To explore the relationship between **block-level dengue cases** and **lagged cl
 
 ## Results
 
-| Variable                   | Correlation | Significant (p<0.05) | Interpretation                                      |
+| Variable                   | Correlation | Significant (p<0.05) | Relationship                                      |
 |----------------------------|-------------|-----------------------|-----------------------------------------------------|
 | temperature_2m_max         | -0.007      |  N                    | No meaningful relationship                          |
 | temperature_2m_min         | -0.059      |  Y                    | Weak negative effect — higher min temp, fewer cases |
