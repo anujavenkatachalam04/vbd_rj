@@ -5,6 +5,8 @@ import os
 from datetime import timedelta
 from plotly import graph_objects as go
 from utils import load_drive, get_sorted_subdistricts
+from itertools import groupby
+from operator import itemgetter
 
 st.set_page_config(page_title="Top Blocks - Weekly Time Series (Jul-Dec 2024)", layout="wide")
 
@@ -47,6 +49,31 @@ max_rh = 80
 min_rainfall = 0.5
 max_rainfall = 150
 
+def get_highlight_ranges(df, date_col, condition_series):
+    # Extract dates where condition is True
+    dates = df.loc[condition_series, date_col].sort_values().tolist()
+    if not dates:
+        return []
+
+    # Group consecutive dates (assuming weekly data: consecutive means 7 days apart)
+    ranges = []
+    group = []
+    prev_date = None
+
+    for d in dates:
+        if prev_date is None or (d - prev_date).days == 7:
+            group.append(d)
+        else:
+            ranges.append((group[0], group[-1]))
+            group = [d]
+        prev_date = d
+    if group:
+        ranges.append((group[0], group[-1]))
+
+    # Expand each range by 6 days to cover full week (start to end +6)
+    expanded_ranges = [(start, end + timedelta(days=6)) for start, end in ranges]
+    return expanded_ranges
+
 
 def plot_temperature(df):
     fig = go.Figure()
@@ -67,16 +94,13 @@ def plot_temperature(df):
         name="Min Temp", mode="lines+markers", line=dict(color="blue"), yaxis="y2"
     ))
 
-    for dt in df[df["temperature_2m_max"] <= max_temp_threshold]["week_start_date"]:
+    # Highlight weeks where max temp between 18 and 35
+    highlight_condition = (df["temperature_2m_max"] >= min_temp_threshold) & (df["temperature_2m_max"] <= max_temp_threshold)
+    highlight_ranges = get_highlight_ranges(df, "week_start_date", highlight_condition)
+    for start, end in highlight_ranges:
         fig.add_vrect(
-            x0=dt, x1=dt + timedelta(days=6),
-            fillcolor="orange", opacity=0.1, line_width=0, layer="below"
-        )
-
-    for dt in df[df["temperature_2m_min"] >= min_temp_threshold]["week_start_date"]:
-        fig.add_vrect(
-            x0=dt, x1=dt + timedelta(days=6),
-            fillcolor="blue", opacity=0.1, line_width=0, layer="below"
+            x0=start, x1=end,
+            fillcolor="orange", opacity=0.15, line_width=0, layer="below"
         )
 
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
@@ -129,10 +153,13 @@ def plot_rainfall(df):
         name="Rainfall (mm)", mode="lines+markers", line=dict(color="purple"), yaxis="y2"
     ))
 
-    for dt in df[df["rain_sum"].between(min_rainfall, max_rainfall)]["week_start_date"]:
+    # Highlight rainfall between thresholds
+    highlight_condition = (df["rain_sum"] >= min_rainfall) & (df["rain_sum"] <= max_rainfall)
+    highlight_ranges = get_highlight_ranges(df, "week_start_date", highlight_condition)
+    for start, end in highlight_ranges:
         fig.add_vrect(
-            x0=dt, x1=dt + timedelta(days=6),
-            fillcolor="purple", opacity=0.1, line_width=0, layer="below"
+            x0=start, x1=end,
+            fillcolor="purple", opacity=0.15, line_width=0, layer="below"
         )
 
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
@@ -185,10 +212,13 @@ def plot_humidity(df):
         name="Humidity (%)", mode="lines+markers", line=dict(color="green"), yaxis="y2"
     ))
 
-    for dt in df[df["relative_humidity_2m_mean"].between(min_rh, max_rh)]["week_start_date"]:
+    # Highlight humidity between thresholds
+    highlight_condition = (df["relative_humidity_2m_mean"] >= min_rh) & (df["relative_humidity_2m_mean"] <= max_rh)
+    highlight_ranges = get_highlight_ranges(df, "week_start_date", highlight_condition)
+    for start, end in highlight_ranges:
         fig.add_vrect(
-            x0=dt, x1=dt + timedelta(days=6),
-            fillcolor="green", opacity=0.1, line_width=0, layer="below"
+            x0=start, x1=end,
+            fillcolor="green", opacity=0.15, line_width=0, layer="below"
         )
 
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
@@ -228,7 +258,6 @@ def plot_humidity(df):
         paper_bgcolor="white"
     )
     return fig
-
 
 
 st.title("Dengue and Climate Conditions per Block")
