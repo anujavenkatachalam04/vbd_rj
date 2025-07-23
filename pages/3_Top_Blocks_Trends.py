@@ -64,7 +64,7 @@ def plot_temperature(df):
         fig.update_layout(
             title="Temperature and Dengue Cases",
             xaxis=dict(title="Week", tickangle=-45, tickfont=dict(size=11, color='black')),
-            yaxis=dict(title="Dengue Cases", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
+            yaxis=dict(title="Dengue Cases", font=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
             yaxis2=dict(title="Temperature (°C)", overlaying="y", side="right", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
             legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center", font=dict(size=12, color='black')),
             height=500,
@@ -88,15 +88,31 @@ def plot_rainfall(df):
 
     try:
         fig.update_layout(
-            title="Rainfall and Dengue Cases",
-            xaxis=dict(title="Week", tickangle=-45, tickfont=dict(size=11, color='black')),
-            yaxis=dict(title="Dengue Cases", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
-            yaxis2=dict(title="Rainfall (mm)", overlaying="y", side="right", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
-            legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center", font=dict(size=12, color='black')),
+            title="Temperature and Dengue Cases",
+            xaxis=dict(
+                title=dict(text="Week", font=dict(size=11, color='black')),
+                tickangle=-45,
+                tickfont=dict(size=11, color='black')
+            ),
+            yaxis=dict(
+                title=dict(text="Dengue Cases", font=dict(size=12, color='black')),
+                tickfont=dict(size=11, color='black')
+            ),
+            yaxis2=dict(
+                title=dict(text="Temperature (°C)", font=dict(size=12, color='black')),
+                overlaying="y",
+                side="right",
+                tickfont=dict(size=11, color='black')
+            ),
+            legend=dict(
+                orientation="h", y=-0.3, x=0.5, xanchor="center",
+                font=dict(size=12, color='black')
+            ),
             height=500,
             plot_bgcolor="white",
             paper_bgcolor="white"
         )
+
     except Exception as e:
         st.error(f"Plot layout error: {e!s}")
         raise
