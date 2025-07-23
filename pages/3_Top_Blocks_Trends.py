@@ -1,8 +1,8 @@
-import streamlit as st
+ import streamlit as st
 import pandas as pd
 import os
 from plotly import graph_objects as go
-from utils import load_drive, get_sorted_districts, get_sorted_subdistricts
+from utils import load_drive, get_sorted_subdistricts
 
 st.set_page_config(page_title="Top Blocks - Weekly Time Series (Jul-Dec 2024)", layout="wide")
 
@@ -19,7 +19,7 @@ if not os.path.exists(csv_path):
 @st.cache_data
 def load_weekly_data():
     df = pd.read_csv(csv_path, parse_dates=["week_start_date"])
-    df = df[df["sdtname_disp"].str.contains("High")]
+    df = df[df["sdtname_disp"].str.contains("High", na=False)]
     for col in ["dtname", "sdtname", "dtname_disp", "sdtname_disp"]:
         df[col] = df[col].astype(str).str.strip()
     df["iso_year_week"] = pd.Categorical(
@@ -29,15 +29,13 @@ def load_weekly_data():
 
 df = load_weekly_data()
 
-# --- Sidebar filters ---
-districts = get_sorted_districts(df)
-selected_dt = st.sidebar.selectbox("Select District", districts)
-
-subdistricts = get_sorted_subdistricts(df[df["dtname_disp"] == selected_dt])
+# --- Sidebar filters (only subdistricts, exclude 'All') ---
+subdistricts = [s for s in get_sorted_subdistricts(df) if s.lower() != "all"]
 selected_sdt = st.sidebar.selectbox("Select Block", subdistricts)
 
-# --- Filter for selected block ---
-block_df = df[(df["dtname_disp"] == selected_dt) & (df["sdtname_disp"] == selected_sdt)].sort_values("week_start_date")
+# --- Filter for selected block and infer district ---
+block_df = df[df["sdtname_disp"] == selected_sdt].sort_values("week_start_date")
+selected_dt = block_df["dtname_disp"].iloc[0] if not block_df.empty else ""
 
 if block_df.empty:
     st.warning("No data available for this selection.")
@@ -104,4 +102,3 @@ with tab2:
     st.plotly_chart(plot_rainfall(block_df), use_container_width=True)
 with tab3:
     st.plotly_chart(plot_humidity(block_df), use_container_width=True)
-
