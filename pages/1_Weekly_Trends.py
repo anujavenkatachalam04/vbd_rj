@@ -178,15 +178,21 @@ for i in range(1, 6):
 
 # --- Layout ---
 fig.update_layout(
+    title=dict(
+        text=f"Weekly Dengue and Climate Trends (Jul–Dec 2024) — Block: {selected_sdt}, District: {selected_dt}",
+        font=dict(size=24, color='black'),
+        x=0.5,  # Center the title
+        xanchor='center'
+    ),
+    font=dict(color='black'),
+    showlegend=False,
     height=2100,
     width=3000,
-    title_text=f"Weekly Dengue and Climate Trends (Jul–Dec 2024) — Block: {selected_sdt}, District: {selected_dt}",
-    showlegend=False,
     margin=dict(t=80, b=100),
     plot_bgcolor="white",
-    paper_bgcolor="white",
-    font=dict(color='black')
+    paper_bgcolor="white"
 )
+
 
 # --- Plotly chart output ---
 st.plotly_chart(fig, use_container_width=True)
