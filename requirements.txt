@@ -3,5 +3,4 @@ pandas
 plotly
 pydrive2
 oauth2client
-itertools
-operator
+
