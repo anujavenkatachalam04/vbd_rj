@@ -13,6 +13,7 @@ Use the sidebar to explore the following pages:
 
 - **Weekly Trends** (2024 Dengue Season - Jul-Dec) : Weekly Time Series charts for each block within a district.
 - **Monthly Trends** (2022-2024): Monthly Time Series charts for each block within a district.
+- **Top Blocks Trends** (2024 Dengue Season - Jul-Dec): Weekly Time Series charts for blocks with the highest blocks across the state.
 ---
 
 ### Datasets:
