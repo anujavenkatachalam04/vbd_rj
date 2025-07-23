@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from utils import load_drive
 
-st.set_page_config(page_title="Breeding Conditions GIF", layout="wide")
+st.set_page_config(page_title="Breeding Conditions", layout="wide")
 
 gif_path = "breeding_conditions_cases.gif"
 gif_file_id = "1q5xMFHqlDcokgHX8cumuIRQ4NxPaFmTc"  # ID from shared Google Drive link
@@ -14,24 +14,14 @@ if not os.path.exists(gif_path):
     gif_file.GetContentFile(gif_path)
 
 # --- Title and Image Display ---
-st.title("🦟 Breeding Conditions & Dengue Cases Over Time")
+st.title("Breeding Conditions & Dengue Cases (2024)")
 
 if os.path.exists(gif_path):
     with open(gif_path, "rb") as f:
         img_bytes = f.read()
     st.image(img_bytes)  # ✅ Removed `format="GIF"`
 else:
-    st.error("❗ GIF file not found or could not be loaded.")
-
-# --- Descriptive Notes ---
-st.markdown("""
----
-### Notes:
-- ✅ **Green areas** show where breeding thresholds were met.
-- 🔴 **Red bubbles** reflect dengue cases (larger = more cases).
-- 🗓️ Animated weekly data for July–December 2024.
-""")
-
+    st.error("GIF file not found or could not be loaded.")
 # Markdown notes / comments section
 st.markdown("""
 ---
