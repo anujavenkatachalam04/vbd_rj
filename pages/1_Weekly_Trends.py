@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from utils import load_drive, get_sorted_districts, get_sorted_subdistricts
 from datetime import timedelta
 
-st.set_page_config(page_title="Weekly Time Series - Dengue & Climate (May-Dec 2024)", layout="wide")
+st.set_page_config(page_title="Weekly Time Series - Dengue & Climate (Jul-Dec 2024)", layout="wide")
 
 # --- Load data from Google Drive only if not already downloaded ---
 csv_path = "time_series_dashboard.csv"
@@ -180,7 +180,7 @@ for i in range(1, 6):
 fig.update_layout(
     height=2100,
     width=3000,
-    title_text=f"Weekly Dengue and Climate Trends (May–Dec 2024) — Block: {selected_sdt}, District: {selected_dt}",
+    title_text=f"Weekly Dengue and Climate Trends (Jul–Dec 2024) — Block: {selected_sdt}, District: {selected_dt}",
     showlegend=False,
     margin=dict(t=80, b=100),
     plot_bgcolor="white",
@@ -195,7 +195,7 @@ st.plotly_chart(fig, use_container_width=True)
 pct_blocks = filtered["pct_blocks_with_cases"].iloc[0] if "pct_blocks_with_cases" in filtered.columns else None
 if pd.notna(pct_blocks):
     st.markdown(f"<div style='font-size: 14px; color: gray; margin-top: -20px;'>"
-                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between May 2024 and December 2024."
+                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between Jul 2024 and December 2024."
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
@@ -213,11 +213,12 @@ st.markdown("""
 **Districts with Highest Dengue Cases**  
 | S.No | District     | Dengue Cases |
 |------|--------------|--------------|
-| 1    | Jaipur       | 1601.0       |
-| 2    | Udaipur      | 1170.0       |
-| 3    | Bikaner      | 816.0        |
-| 4    | Dausa        | 514.0        |
-| 5    | Ganganagar   | 446.0        |
+| 1    | Jaipur       | 1570.0       |
+| 2    | Udaipur      | 1153.0       |
+| 3    | Bikaner      | 710.0        |
+| 4    | Dausa        | 506.0        |
+| 5    | Ganganagar   | 445.0        |
+| 6    | Ajmer        | 429.0        |
 
 **Subdistricts with Highest Dengue Cases**  
 | Rank | District    | Subdistrict | Dengue Cases | 
@@ -228,4 +229,5 @@ st.markdown("""
 | 4    | Jaipur      | Sanganer    | 424.0         | 
 | 5    | Ganganagar  | Ganganagar  | 352.0         | 
 | 6    | Kota        | Ladpura     | 325.0         |
+| 7    | Ajmer       | Ajmer       | 261.0         |
 """)
