@@ -28,4 +28,5 @@ st.markdown("""
 ### Notes:
 - The green shading indicates areas meeting breeding condition thresholds: Mean Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH 60–80%.
 - Bubble sizes represent the number of dengue cases.
+- Reload the page to view the GIF again.
 """)
