@@ -111,7 +111,7 @@ def plot_temperature(df):
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
 
     fig.update_layout(
-        title=dict(text="Temperature and Dengue Cases", font=dict(color="black", size=16)),
+        title=dict(text="Temperature and Dengue Cases", font=dict(color="black", size=16), x=0.5),
         xaxis=dict(
             title=dict(text="Week", font=dict(size=12, color='black')),
             tickangle=-45,
@@ -174,7 +174,7 @@ def plot_rainfall(df):
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
 
     fig.update_layout(
-        title=dict(text="Rainfall and Dengue Cases", font=dict(color="black", size=16)),
+        title=dict(text="Rainfall and Dengue Cases", font=dict(color="black", size=16), x=0.5),
         xaxis=dict(
             title=dict(text="Week", font=dict(size=12, color='black')),
             tickangle=-45,
@@ -237,7 +237,7 @@ def plot_humidity(df):
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
 
     fig.update_layout(
-        title=dict(text="Humidity and Dengue Cases", font=dict(color="black", size=16)),
+        title=dict(text="Humidity and Dengue Cases", font=dict(color="black", size=16), x=0.5),
         xaxis=dict(
             title=dict(text="Week", font=dict(size=12, color='black')),
             tickangle=-45,
