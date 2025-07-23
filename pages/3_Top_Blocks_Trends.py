@@ -162,10 +162,14 @@ def plot_rainfall(df):
     highlight_condition = (df["rain_sum"] >= min_rainfall) & (df["rain_sum"] <= max_rainfall)
     highlight_ranges = get_highlight_ranges(df, "week_start_date", highlight_condition)
     for start, end in highlight_ranges:
-        fig.add_vrect(
-            x0=start, x1=end,
-            fillcolor="purple", opacity=0.15, line_width=0, layer="below"
-        )
+        fig.add_hrect(
+        y0=min_rainfall, y1=max_rainfall,
+        fillcolor="purple",
+        opacity=0.15,
+        line_width=0,
+        layer="below",
+        yref="y2")
+
 
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
 
@@ -221,10 +225,14 @@ def plot_humidity(df):
     highlight_condition = (df["relative_humidity_2m_mean"] >= min_rh) & (df["relative_humidity_2m_mean"] <= max_rh)
     highlight_ranges = get_highlight_ranges(df, "week_start_date", highlight_condition)
     for start, end in highlight_ranges:
-        fig.add_vrect(
-            x0=start, x1=end,
-            fillcolor="green", opacity=0.15, line_width=0, layer="below"
-        )
+        fig.add_hrect(
+            y0=min_rh, y1=max_rh,
+            fillcolor="green",
+            opacity=0.15,
+            line_width=0,
+            layer="below",
+            yref="y2")
+
 
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
 
