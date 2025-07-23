@@ -98,11 +98,16 @@ def plot_temperature(df):
     highlight_condition = (df["temperature_2m_max"] >= min_temp_threshold) & (df["temperature_2m_max"] <= max_temp_threshold)
     highlight_ranges = get_highlight_ranges(df, "week_start_date", highlight_condition)
     for start, end in highlight_ranges:
-        fig.add_vrect(
-            x0=start, x1=end,
-            fillcolor="orange", opacity=0.15, line_width=0, layer="below"
+        # Add horizontal highlight band on y-axis 2 for temperature range
+        fig.add_hrect(
+            y0=min_temp_threshold, y1=max_temp_threshold,
+            fillcolor="orange",
+            opacity=0.15,
+            line_width=0,
+            layer="below",
+            yref="y2"
         )
-
+        
     x_ticks = df["week_start_date"].dt.strftime("%Y-%m-%d").tolist()
 
     fig.update_layout(
