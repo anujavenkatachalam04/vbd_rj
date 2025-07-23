@@ -1,4 +1,4 @@
-# Pearson's Correlation for Threshold (+ Lag (9 weeks) - Dengue & Climate (Jul–Dec 2024)
+# Pearson's Correlation for Threshold (Tmin >=18 AND Tmax <=35 OR Rel Humidity b/w 60,80) & Lag (9 weeks) - Dengue & Climate (Jul–Dec 2024)
 
 ## Objective
 To explore the relationship between **block-level dengue cases** and **lagged climate variables** during the period **July–December 2024**, focusing on lags between climate exposure and disease onset.
