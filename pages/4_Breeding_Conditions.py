@@ -1,18 +1,25 @@
+
 import streamlit as st
 import os
+from utils import load_drive
 
-output_dir = "breeding_gif_frames"
-gif_filename = "breeding_conditions_cases.gif"
-gif_path = os.path.join(output_dir, gif_filename)
+st.set_page_config(page_title="Breeding Conditions", layout="wide")
 
-st.title("Breeding Conditions & Dengue Cases (2024)")
+gif_path = "breeding_conditions_cases.gif"
+gif_file_id = "1q5xMFHqlDcokgHX8cumuIRQ4NxPaFmTc"  # Your Google Drive file ID
+
+if not os.path.exists(gif_path):
+    drive = load_drive(st.secrets["gdrive_creds"])
+    gif_file = drive.CreateFile({'id': gif_file_id})
+    gif_file.GetContentFile(gif_path)
+
+st.title("🦟 Breeding Conditions & Dengue Cases Over Time")
 
 if os.path.exists(gif_path):
     with open(gif_path, "rb") as f:
-        gif_bytes = f.read()
-    st.image(gif_bytes, format="gif")
+        st.image(f.read(), format="gif")
 else:
-    st.error(f"GIF file not found at {gif_path}")
+    st.error("GIF file could not be loaded from Google Drive.")
 
 # Markdown notes / comments section
 st.markdown("""
