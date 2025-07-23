@@ -59,18 +59,22 @@ def plot_temperature(df):
 
     for dt in df[df["temperature_2m_min"] >= min_temp_threshold]["week_start_date"]:
         fig.add_vrect(x0=dt, x1=dt + pd.Timedelta(days=6), fillcolor="blue", opacity=0.1, line_width=0)
+        try:
+            fig.update_layout(
+                title="Temperature and Dengue Cases",
+                xaxis=dict(title="Week", tickangle=-45, tickfont=dict(size=11, color='black')),
+                yaxis=dict(title="Dengue Cases", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
+                yaxis2=dict(title="Temperature (°C)", overlaying="y", side="right", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
+                legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center", font=dict(size=12, color='black')),
+                height=500,
+                plot_bgcolor="white",
+                paper_bgcolor="white"
+            )
+        except Exception as e:
+            st.error(f"Plot layout error: {e!s}")
+            raise
+        return fig
 
-    fig.update_layout(
-        title="Temperature and Dengue Cases",
-        xaxis=dict(title="Week", tickangle=-45, tickfont=dict(size=11, color='black')),
-        yaxis=dict(title="Dengue Cases", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
-        yaxis2=dict(title="Temperature (°C)", overlaying="y", side="right", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
-        legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center"),
-        height=500,
-        plot_bgcolor="white",
-        paper_bgcolor="white"
-    )
-    return fig
 
 def plot_rainfall(df):
     fig = go.Figure()
@@ -80,17 +84,21 @@ def plot_rainfall(df):
     for dt in df[df["rain_sum"].between(min_rainfall, max_rainfall)]["week_start_date"]:
         fig.add_vrect(x0=dt, x1=dt + pd.Timedelta(days=6), fillcolor="purple", opacity=0.1, line_width=0)
 
-    fig.update_layout(
-        title="Rainfall and Dengue Cases",
-        xaxis=dict(title="Week", tickangle=-45, tickfont=dict(size=11, color='black')),
-        yaxis=dict(title="Dengue Cases", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
-        yaxis2=dict(title="Rainfall (mm)", overlaying="y", side="right", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
-        legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center"),
-        height=500,
-        plot_bgcolor="white",
-        paper_bgcolor="white"
-    )
-    return fig
+         try:
+            fig.update_layout(
+                title="Temperature and Dengue Cases",
+                xaxis=dict(title="Week", tickangle=-45, tickfont=dict(size=11, color='black')),
+                yaxis=dict(title="Dengue Cases", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
+                yaxis2=dict(title="Temperature (°C)", overlaying="y", side="right", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
+                legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center", font=dict(size=12, color='black')),
+                height=500,
+                plot_bgcolor="white",
+                paper_bgcolor="white"
+            )
+        except Exception as e:
+            st.error(f"Plot layout error: {e!s}")
+            raise
+        return fig
 
 def plot_humidity(df):
     fig = go.Figure()
@@ -100,17 +108,21 @@ def plot_humidity(df):
     for dt in df[df["relative_humidity_2m_mean"].between(min_rh, max_rh)]["week_start_date"]:
         fig.add_vrect(x0=dt, x1=dt + pd.Timedelta(days=6), fillcolor="green", opacity=0.1, line_width=0)
 
-    fig.update_layout(
-        title="Relative Humidity and Dengue Cases",
-        xaxis=dict(title="Week", tickangle=-45, tickfont=dict(size=11, color='black')),
-        yaxis=dict(title="Dengue Cases", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
-        yaxis2=dict(title="Humidity (%)", overlaying="y", side="right", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
-        legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center"),
-        height=500,
-        plot_bgcolor="white",
-        paper_bgcolor="white"
-    )
-    return fig
+     try:
+            fig.update_layout(
+                title="Temperature and Dengue Cases",
+                xaxis=dict(title="Week", tickangle=-45, tickfont=dict(size=11, color='black')),
+                yaxis=dict(title="Dengue Cases", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
+                yaxis2=dict(title="Temperature (°C)", overlaying="y", side="right", titlefont=dict(size=12, color='black'), tickfont=dict(size=11, color='black')),
+                legend=dict(orientation="h", y=-0.3, x=0.5, xanchor="center", font=dict(size=12, color='black')),
+                height=500,
+                plot_bgcolor="white",
+                paper_bgcolor="white"
+            )
+        except Exception as e:
+            st.error(f"Plot layout error: {e!s}")
+            raise
+        return fig
 
 # --- Streamlit layout ---
 st.title("Dengue and Climate Conditions per Block")
