@@ -11,7 +11,7 @@ Welcome to the Dengue-Climate Dashboard for Rajasthan!
 ### Navigation:
 Use the sidebar to explore the following pages:
 
-- **Weekly Trends** (2024 Dengue Season - May-Dec) : Weekly Time Series charts for each block within a district.
+- **Weekly Trends** (2024 Dengue Season - Jul-Dec) : Weekly Time Series charts for each block within a district.
 - **Monthly Trends** (2022-2024): Monthly Time Series charts for each block within a district.
 ---
 
