@@ -179,7 +179,7 @@ for i in range(1, 6):
 # --- Layout ---
 fig.update_layout(
     title=dict(
-        text=f"Weekly Trends (Jul–Dec 2024) — Block: {selected_sdt}, District: {selected_dt}",
+        text=f"Weekly Trends (Jun–Nov 2024) — Block: {selected_sdt}, District: {selected_dt}",
         font=dict(size=24, color='black'),
         x=0.5,  # Center the title
         xanchor='center'
@@ -201,7 +201,7 @@ st.plotly_chart(fig, use_container_width=True)
 pct_blocks = filtered["pct_blocks_with_cases"].iloc[0] if "pct_blocks_with_cases" in filtered.columns else None
 if pd.notna(pct_blocks):
     st.markdown(f"<div style='font-size: 14px; color: gray; margin-top: -20px;'>"
-                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between Jul 2024 and December 2024."
+                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between Jun 2024 and Nov 2024."
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
@@ -219,21 +219,21 @@ st.markdown("""
 **Districts with Highest Dengue Cases**  
 | S.No | District     | Dengue Cases |
 |------|--------------|--------------|
-| 1    | Jaipur       | 1570.0       |
-| 2    | Udaipur      | 1153.0       |
-| 3    | Bikaner      | 710.0        |
-| 4    | Dausa        | 506.0        |
+| 1    | Jaipur       | 1571.0       |
+| 2    | Udaipur      | 1157.0       |
+| 3    | Bikaner      | 726.0        |
+| 4    | Dausa        | 509.0        |
 | 5    | Ganganagar   | 445.0        |
-| 6    | Ajmer        | 429.0        |
+| 6    | Ajmer        | 431.0        |
 
 **Subdistricts with Highest Dengue Cases**  
 | Rank | District    | Subdistrict | Dengue Cases | 
 |------|-------------|-------------|---------------|
-| 1    | Jaipur      | Jaipur      | 780.0         | 
-| 2    | Udaipur     | Girwa       | 748.0         | 
-| 3    | Bikaner     | Bikaner     | 546.0         |
-| 4    | Jaipur      | Sanganer    | 424.0         | 
+| 1    | Jaipur      | Jaipur      | 775.0         | 
+| 2    | Udaipur     | Girwa       | 745.0         | 
+| 3    | Bikaner     | Bikaner     | 492.0         |
+| 4    | Jaipur      | Sanganer    | 406.0         | 
 | 5    | Ganganagar  | Ganganagar  | 352.0         | 
-| 6    | Kota        | Ladpura     | 325.0         |
+| 6    | Kota        | Ladpura     | 324.0         |
 | 7    | Ajmer       | Ajmer       | 261.0         |
 """)
