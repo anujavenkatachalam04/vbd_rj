@@ -4,9 +4,21 @@
 
 ## Pearson's r for 5 high reporting blocks in Rajasthan
 
+1) Fixed lag - not threshold days
+
 | Variable                         | 6 weeks (42 days) | 7 weeks (49 days) | 9 weeks (63 days) | 10 weeks (70 days) | 
 | -------------------------------- | ----------------- | ----------------- | ----------------- | ------------------ |
 | **Mean Maximum Temperature**         | -0.357 \*         | -0.382 \*         | -0.420 \*         | -0.428 \*          |
 | **Mean Minimum Temperature**         | -0.255 \*         | -0.271 \*         | -0.291 \*         | -0.293 \*          |
 | **Mean Relative Humidity** | 0.269 \*          | 0.311 \*          | 0.376 \*          | 0.400 \*           |
 | **Total Rainfall**                    | -0.024            | 0.006             | 0.052             | 0.071              |
+
+## Fixed lag - with threshold days
+
+| Climate Variable       | 6 Weeks   | 7 Weeks   | 9 Weeks   | 10 Weeks  |
+|------------------------|-----------|-----------|-----------|-----------|
+| Max Temperature (°C)   | -0.311*   | -0.347*   | -0.368*   | -0.350*   |
+| Min Temperature (°C)   | -0.064    | -0.049    | -0.009    | 0.025     |
+| Relative Humidity (%)  | 0.195*    | 0.230*    | 0.301*    | 0.328*    |
+| Rainfall (mm)          | -0.067    | -0.041    | -0.003    | 0.004     |
+
