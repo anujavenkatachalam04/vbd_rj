@@ -17,4 +17,4 @@
 | Relative Humidity (%)   | Positive    | 0.001     | 0.195*    | 0.230*    | 0.301*    | 0.328*    |
 | Rainfall (mm)           | Mixed       | -0.165*   | -0.067    | -0.041    | -0.003    | 0.004     |
 
-*Note: Asterisk (`*`) denotes statistically significant correlation (**p < 0.05**).
+* Note: Asterisk (`*`) denotes statistically significant correlation (**p < 0.05**).
