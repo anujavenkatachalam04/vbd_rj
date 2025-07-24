@@ -19,9 +19,9 @@
 
 | Climate Variable        | 2 Weeks   | 6 Weeks   | 7 Weeks   | 9 Weeks   | 10 Weeks  | Association |
 |-------------------------|-------------|-----------|-----------|-----------|-----------|-----------|
-| Max Temperature (°C)    | -0.052    | -0.311*   | -0.347*   | -0.368*   | -0.350*   | Moderate Negative    |
-| Min Temperature (°C)    |  -0.081    | -0.064    | -0.049    | -0.009    | 0.025     |Weak Mixed    |
-| Relative Humidity (%)   |  0.001     | 0.195*    | 0.230*    | 0.301*    | 0.328*    |Moderate Positive    |
-| Rainfall (mm)           |  -0.165*   | -0.067    | -0.041    | -0.003    | 0.004     |Weak Mixed       |
+| Max Temperature (°C)    | -0.052    | -0.311*   | -0.347*   | -0.368*   | -0.350*   | Moderate negative    |
+| Min Temperature (°C)    |  -0.081    | -0.064    | -0.049    | -0.009    | 0.025     |Weak/unclear    |
+| Relative Humidity (%)   |  0.001     | 0.195*    | 0.230*    | 0.301*    | 0.328*    |Moderate positive    |
+| Rainfall (mm)           |  -0.165*   | -0.067    | -0.041    | -0.003    | 0.004     |Weak/unclear       |
 
 * Note: Asterisk (`*`) denotes statistically significant correlation (**p < 0.05**).
