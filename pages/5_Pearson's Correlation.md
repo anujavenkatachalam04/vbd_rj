@@ -12,8 +12,7 @@
 | **Min Temperature (°C)**  | -0.147 *     | -0.255 *     | -0.271 *     | -0.291 *     | -0.293 *      | Moderate negative           |
 | **Relative Humidity (%)** | 0.055        | 0.269 *      | 0.311 *      | 0.376 *      | 0.400 *       | Strong positive (≥6 weeks)  |
 | **Rainfall (mm)**         | -0.151 *     | -0.024       | 0.006        | 0.052        | 0.071         | Weak/unclear                |
-
-
+* `*` denotes statistically significant correlation (**p < 0.05**).
 
 ## Fixed lag - only threshold days
 
@@ -24,4 +23,4 @@
 | Relative Humidity (%)   |  0.001     | 0.195*    | 0.230*    | 0.301*    | 0.328*    |Moderate positive    |
 | Rainfall (mm)           |  -0.165*   | -0.067    | -0.041    | -0.003    | 0.004     |Weak/unclear       |
 
-* Note: Asterisk (`*`) denotes statistically significant correlation (**p < 0.05**).
+* `*` denotes statistically significant correlation (**p < 0.05**).
