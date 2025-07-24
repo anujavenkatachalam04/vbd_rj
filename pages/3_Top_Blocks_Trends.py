@@ -273,7 +273,7 @@ def plot_humidity(df):
     return fig
 
 
-st.title("Dengue and Climate Conditions per Block")
+st.title("Dengue and Climate Conditions")
 st.markdown(f"### {selected_sdt}")
 
 tab1, tab2, tab3 = st.tabs(["Temperature", "Rainfall", "Humidity"])
