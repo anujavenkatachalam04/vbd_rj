@@ -5,7 +5,8 @@
 ## Pearson's r for 5 high reporting blocks in Rajasthan
 
 1) Fixed lag - not threshold days
-| **Variable**              | **2 weeks** | **6 weeks** | **7 weeks** | **9 weeks** | **10 weeks** | **Association**             |
+   
+| **Variable**              | 2 weeks | 6 weeks | 7 weeks | 9 weeks | **10 weeks** | Association|
 |---------------------------|-------------|-------------|-------------|-------------|--------------|-----------------------------|
 | **Max Temperature (°C)**  | -0.143 *     | -0.357 *     | -0.382 *     | -0.420 *     | -0.428 *      | Strong negative             |
 | **Min Temperature (°C)**  | -0.147 *     | -0.255 *     | -0.271 *     | -0.291 *     | -0.293 *      | Moderate negative           |
