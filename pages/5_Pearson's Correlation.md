@@ -1,10 +1,13 @@
-## Fixed Lags - High subdistricts (excluding outliers) - June - Nov 2024
+## Correlation Analysis
  
-- Top 7 subdistricts excluding: Ganganagar & Bikaner ['Ajmer', 'Jaipur', 'Sanganer', 'Ladpura', 'Girwa']
+- The objective is to identify any significant correlations between climatic predictors and dengue cases for further modeling.
 
-## Pearson's r for 5 high reporting blocks in Rajasthan
-
-1) Fixed lag - not threshold days
+## Scope
+* In 2024, five out of 33 districts accounted for 50% of dengue cases in Rajasthan.
+* Sparse and under-reported data limits the reliability of state-wide climate lag and threshold analysis.
+* Therefore, the analysis is restricted to sub-districts reporting ≥5% of total state cases. Of these,  two subdistricts - Ganganagar & Bikaner were excluded due to reporting anomalies (e.g., sudden spikes, delayed onset).
+  
+## Pearson's Correlation Without Threshold 
    
 | **Variable**              | 2 weeks | 6 weeks | 7 weeks | 9 weeks | **10 weeks** | Association|
 |---------------------------|-------------|-------------|-------------|-------------|--------------|-----------------------------|
@@ -14,7 +17,7 @@
 | **Rainfall (mm)**         | -0.151 *     | -0.024       | 0.006        | 0.052        | 0.071         | Weak/unclear                |
 * `*` denotes statistically significant correlation (**p < 0.05**).
 
-## Fixed lag - only threshold days
+## Pearson's Correlation Post Threshold (Mean Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH 60–80%)
 
 | Climate Variable        | 2 Weeks   | 6 Weeks   | 7 Weeks   | 9 Weeks   | 10 Weeks  | Association |
 |-------------------------|-------------|-----------|-----------|-----------|-----------|-----------|
@@ -24,3 +27,4 @@
 | Rainfall (mm)           |  -0.165*   | -0.067    | -0.041    | -0.003    | 0.004     |Weak/unclear       |
 
 * `*` denotes statistically significant correlation (**p < 0.05**).
+* Only includes cases where threshold conditions were met in atleast 4 out of the 7 days prior to the lagged exposure date.
