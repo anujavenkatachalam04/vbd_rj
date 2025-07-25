@@ -28,3 +28,25 @@
 
 * `*` denotes statistically significant correlation (**p < 0.05**).
 * Only includes cases where threshold conditions were met in atleast 4 out of the 7 days prior to the lagged exposure date.
+
+## DLNM
+
+### 📊 Climate–Dengue DLNM Summary (June–Nov 2024)
+
+| **Variable**        | **Notable Lags (Weeks)**      | **Direction of Effect**   | **Short-Term Interpretation (0–2 weeks)**              | **Long-Term Interpretation (3–12 weeks)**                           | **Cumulative Effect** |
+|---------------------|-------------------------------|----------------------------|--------------------------------------------------------|---------------------------------------------------------------------|------------------------|
+| **Max Temperature** | Lag 3–4 (sig. negative), 12 (positive) | Mixed: 🔻 (lag 3–4), 🔺 (lag 12) | Little immediate effect                                 | Dengue cases increase **as temperatures fall** (3–4 weeks later); early season warmth may briefly suppress | **–0.18**              |
+| **Min Temperature** | Lag 0 (sig. positive)          | 🔺 Positive                 | **Warm nights** → more cases in same week              | Effect tapers after 3–4 weeks                                       | **+0.10**              |
+| **Humidity**        | Lag 2–4, 9 (positive)          | 🔺 Positive                 | Little effect in week 0                                 | High humidity **2–4 weeks earlier** increases mosquito survival     | **+0.07**              |
+| **Rainfall**        | Lag 5–7, 10, 12 (mixed)        | Mixed: 🔺 & 🔻              | No immediate impact                                     | Moderate rain increases risk **5–7 weeks later**; excess rain may reduce it | **≈0**                 |
+
+---
+
+### 🧾 Layman's Takeaway
+
+- 🌡️ **Max temp drops → dengue rises** (after 3–4 weeks).
+- 🌙 **Warm nights = more dengue**, especially in the same or next week.
+- 💧 **High humidity** 2–4 weeks before case spikes helps mosquito survival.
+- 🌧️ **Rainfall** has a mixed effect: **moderate rain promotes breeding**, while **excess rain can flush breeding sites**.
+
+
