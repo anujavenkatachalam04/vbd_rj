@@ -42,7 +42,7 @@
 
 ---
 
-### 🧾 Layman's Takeaway
+### Takeaway
 
 - 🌡️ **Max temp drops → dengue rises** (after 3–4 weeks).
 - 🌙 **Warm nights = more dengue**, especially in the same or next week.
