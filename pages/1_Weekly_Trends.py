@@ -212,5 +212,4 @@ st.markdown("""
 | 1    | Starting from week 1 until the week with the maximum dengue cases, identify a week with (a) a four consecutive week increase in cases, and (b) no two consecutive week decrease. |
 | 2    | If no weeks (from week 1 to the week with the maximum dengue cases) are found meeting conditions (a) and (b) above, find a week that meets condition (a), else no trigger week was identified.|
 
---
 """)
