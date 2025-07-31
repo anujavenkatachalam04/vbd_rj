@@ -77,10 +77,10 @@ def fmt_lag(val):
 
 # --- Subplot titles ---
 subplot_titles = [
-    f"Dengue Cases (Mean Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH 60–80%): {fmt_lag(lag_all)}",
+    f"Dengue Cases (Mean Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH ≥ 60): {fmt_lag(lag_all)}",
     f"Mean Maximum Temperature (°C) (Threshold: ≤ 35°C; Lag: {fmt_lag(lag_max)})",
     f"Mean Minimum Temperature (°C) (Threshold: ≥ 18°C; Lag: {fmt_lag(lag_min)})",
-    f"Mean Relative Humidity (%) (Threshold: 60–80%; Lag: {fmt_lag(lag_hum)})",
+    f"Mean Relative Humidity (%) (Threshold: ≥ 60%; Lag: {fmt_lag(lag_hum)})",
     f"Total Rainfall (mm) (Threshold: 0.5–150 mm; Lag: {fmt_lag(lag_rainfall)})"
 ]
 
@@ -154,7 +154,7 @@ add_trace(3, 1, "temperature_2m_min", "Min Temperature (°C) (Weekly Mean)", "bl
           lag_val=lag_min, onset_date=onset_min)
 
 add_trace(4, 1, "relative_humidity_2m_mean", "Relative Humidity (%) (Weekly Mean)", "green",
-          highlight_cond=(filtered["relative_humidity_2m_mean"].between(60, 80)), highlight_color="green",
+          highlight_cond=(filtered["relative_humidity_2m_mean"] >= 60), highlight_color="green",
           lag_val=lag_hum, onset_date=onset_hum)
 
 add_trace(5, 1, "rain_sum", "Rainfall (mm) (Weekly Sum)", "purple",
@@ -179,7 +179,7 @@ for i in range(1, 6):
 # --- Layout ---
 fig.update_layout(
     title=dict(
-        text=f"Weekly Trends (Jun–Nov 2024) — Block: {selected_sdt}, District: {selected_dt}",
+        text=f"Weekly Trends (Jul–Dec 2024) — Block: {selected_sdt}, District: {selected_dt}",
         font=dict(size=24, color='black'),
         x=0.5,  # Center the title
         xanchor='center'
@@ -201,7 +201,7 @@ st.plotly_chart(fig, use_container_width=True)
 pct_blocks = filtered["pct_blocks_with_cases"].iloc[0] if "pct_blocks_with_cases" in filtered.columns else None
 if pd.notna(pct_blocks):
     st.markdown(f"<div style='font-size: 14px; color: gray; margin-top: -20px;'>"
-                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between Jun 2024 and Nov 2024."
+                f"**{pct_blocks:.1f}%** of blocks in this district reported at least one dengue case between Jul 2024 and Dec 2024."
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
@@ -209,31 +209,8 @@ st.markdown("""
 
 | Step | Description |
 |------|-------------|
-| 1    | Identify the week with **maximum dengue cases**. |
-| 2    | Iterate **backwards** from that week to find the last week where dengue cases show a **strict decrease** each week. |
-| 3    | From that point onward, look for **4 consecutive weeks** with at least a **10-case increase** each week. |
-| 4    | The first of those 4 weeks is the **trigger date**. |
-| 5    | If no such stretch is found, trigger = week where cases begin rising. |
+| 1    | Starting from week 1 until the week with the maximum dengue cases, identify a week with (a) a four consecutive week increase in cases, and (b) no two consecutive week decrease. |
+| 2    | If no weeks (from week 1 to the week with the maximum dengue cases) are found meeting conditions (a) and (b) above, find a week that meets condition (a), else no trigger week was identified.|
 
----
-**Districts with Highest Dengue Cases**  
-| S.No | District     | Dengue Cases |
-|------|--------------|--------------|
-| 1    | Jaipur       | 1571.0       |
-| 2    | Udaipur      | 1157.0       |
-| 3    | Bikaner      | 726.0        |
-| 4    | Dausa        | 509.0        |
-| 5    | Ganganagar   | 445.0        |
-| 6    | Ajmer        | 431.0        |
-
-**Subdistricts with Highest Dengue Cases**  
-| Rank | District    | Subdistrict | Dengue Cases | 
-|------|-------------|-------------|---------------|
-| 1    | Jaipur      | Jaipur      | 775.0         | 
-| 2    | Udaipur     | Girwa       | 745.0         | 
-| 3    | Bikaner     | Bikaner     | 492.0         |
-| 4    | Jaipur      | Sanganer    | 406.0         | 
-| 5    | Ganganagar  | Ganganagar  | 352.0         | 
-| 6    | Kota        | Ladpura     | 324.0         |
-| 7    | Ajmer       | Ajmer       | 261.0         |
+--
 """)
