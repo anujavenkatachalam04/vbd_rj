@@ -205,11 +205,9 @@ if pd.notna(pct_blocks):
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
-**Trigger Date: Week where a sustained sharp rise in dengue cases begins**
+**Trigger Week: Point when cases show a sharp and sustained increase in dengue cases begins**
 
-| Step | Description |
-|------|-------------|
-| 1    | Starting from week 1 until the week with the maximum dengue cases, identify a week with (a) a four consecutive week increase in cases, and (b) no two consecutive week decrease. |
-| 2    | If no weeks (from week 1 to the week with the maximum dengue cases) are found meeting conditions (a) and (b) above, find a week that meets condition (a), else no trigger week was identified.|
-
+A week w is the trigger week if:
+** It shows a ≥50% increase in cases compared to the previous 2-week average, and
+** The average cases over the next 3 weeks remains ≥40% higher than the previous 2-week average.
 """)
