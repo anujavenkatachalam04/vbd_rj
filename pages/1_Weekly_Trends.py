@@ -77,11 +77,11 @@ def fmt_lag(val):
 
 # --- Subplot titles ---
 subplot_titles = [
-    f"Dengue Cases (Mean Max Temp ≤ 35°C AND Min Temp ≥ 18°C OR RH ≥ 60): {fmt_lag(lag_all)}",
-    f"Mean Maximum Temperature (°C) (Threshold: ≤ 35°C; Lag: {fmt_lag(lag_max)})",
-    f"Mean Minimum Temperature (°C) (Threshold: ≥ 18°C; Lag: {fmt_lag(lag_min)})",
-    f"Mean Relative Humidity (%) (Threshold: ≥ 60%; Lag: {fmt_lag(lag_hum)})",
-    f"Total Rainfall (mm) (Threshold: 0.5–150 mm; Lag: {fmt_lag(lag_rainfall)})"
+    f"Dengue Cases (Weekly Mean TMax < 36°C AND Weekly Mean TMin ≥ 18°C OR Weekly Mean RH ≥ 60%): {fmt_lag(lag_all)}",
+    f"Weekly Mean TMax (°C) (Threshold: < 36°C; Lag: {fmt_lag(lag_max)})",
+    f"Weekly Mean TMin (°C) (Threshold: ≥ 18°C; Lag: {fmt_lag(lag_min)})",
+    f"Weekly Mean RH (%) (Threshold: ≥ 60%; Lag: {fmt_lag(lag_hum)})",
+    f"Weekly Cumulative Rainfall (mm) (Threshold: 0.5–150 mm; Lag: {fmt_lag(lag_rainfall)})"
 ]
 
 # --- Create subplot figure ---
