@@ -205,9 +205,7 @@ if pd.notna(pct_blocks):
                 f"</div>", unsafe_allow_html=True)
 
 st.markdown("""
-**Trigger Week: Point when cases show a sharp and sustained increase in dengue cases begins**
-
-A week w is the trigger week if:
-** It shows a ≥50% increase in cases compared to the previous 2-week average, and
-** The average cases over the next 3 weeks remains ≥40% higher than the previous 2-week average.
+**Trigger Week**: Point when cases show a sharp and sustained increase in dengue cases begins:
+- It shows a ≥50% increase in cases compared to the previous 2-week average, and
+- The average cases over the next 3 weeks remains ≥40% higher than the previous 2-week average.
 """)
