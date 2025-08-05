@@ -129,13 +129,15 @@ def add_trace(row, col, y_data_col, trace_name, color, highlight_cond=None, high
             )
 
     # Trigger line
-    if trigger is not None:
+
+    # Trigger line
+    if pd.notnull(trigger):
         fig.add_vline(
             x=trigger,
             line=dict(color="black", width=2, dash="dash"),
             row=row, col=col
         )
-    if onset_date is not None:
+    if pd.notnull(onset_date):
         fig.add_vline(
         x=onset_date,
         line=dict(color="red", width=2, dash="dot"),
